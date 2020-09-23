@@ -1,0 +1,16 @@
+td.original p {
+  visibility: hidden;
+
+}
+
+a.inlinechangelink {
+  visibility: visible;
+  padding-left: 13px;
+  font-size: 13px
+
+}
+
+/* select.form-control{
+
+  font-size: 33px;
+} */

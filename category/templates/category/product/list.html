@@ -1,0 +1,76 @@
+{% extends "category/base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+{% block content %}
+<p>Вы находитесь в категории Instance :{{ instance }}</p>
+
+<p>Абсолютный путь категории Path :{{ path }}</p>
+
+<h2>Выделенная категория Category:{{ category.name }}</h2>
+
+
+<p>Главные категории</p>
+
+{% load mptt_tags %}
+<ul>
+    {% recursetree categories %}
+        <li>
+          <a href="{{ node.get_absolute_url }}">{{ node.name }}</a>
+
+          {% if node.image %}
+            {% thumbnail node.image "1000" as big %}
+              {% thumbnail node.image "50x50" crop="center" as small %}
+                <a href="{{ big.url}}" title="look ma!"><img src="{{ small.url }}"></a>
+              {% endthumbnail %}
+            {% endthumbnail %}
+          {% else %}
+             <p>no image</p>
+          {% endif %}
+
+
+
+            {% if not node.is_leaf_node %}
+                <ul class="children">
+                    {{ children }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endrecursetree %}
+</ul>
+
+<p>Главные категории</p>
+
+
+<!-- {% for cat in cate %}
+<li >
+  <a href="{{ cat.get_absolute_url }}">{{cat.name}}</a>
+</li>
+{% endfor %} -->
+
+
+
+<p>________________________</p>
+{% for cat in categories %}
+<li >
+  <a href="{{ cat.get_absolute_url }}">{{cat.name}}</a>
+  {% if cat.image %}
+    <p>  <img src="{{cat.image.url}}" width="60px" height="60px"></p>
+  {% else %}
+     <p>no image</p>
+  {% endif %}
+</li>
+{% endfor %}
+
+<p>Продукты_________________</p>
+
+{% for product in products %}
+<li >
+  <a href="{{ product.get_absolute_url }}">{{product.name}}{{product.image}}</a>
+
+</li>
+{% endfor %}
+
+
+
+{% endblock%}

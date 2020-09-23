@@ -1,0 +1,13 @@
+{'type': 'object', 'title': ' ', 'properties':
+{'Желтый': ({'title': 'Цвет', 'type': 'array', 'format': 'password', 'items': {'title': 'Значение', 'type': 'string', 'enum': ['1', '2', '3', '4', '5']}},),
+'Белый': ({'title': 'Цвет', 'type': 'array', 'format': 'password', 'items': {'title': 'Значение', 'type': 'string', 'enum': ['1', '2', '3', '4', '5']}},),
+'Синий': ({'title': 'Цвет', 'type': 'array', 'format': 'password', 'items': {'title': 'Значение', 'type': 'string', 'enum': ['1', '2', '3', '4', '5']}},)},
+ 'options': {'collapsed': 0}}
+
+
+
+
+ {'type': 'object', 'title': 'Data', 'properties':
+ {'collor': {'title': 'Цвет', 'type': 'array', 'format': 'password', 'items': {'title': 'Значение', 'type': 'string', 'enum': ['1', '2', '3', '4', '5']}},
+ 'Zice': {'title': 'Размер', 'type': 'array', 'format': 'textarea', 'items': {'title': 'Значение', 'type': 'string', 'enum': ['1', '2', '3', '4', '5']}}
+ }}

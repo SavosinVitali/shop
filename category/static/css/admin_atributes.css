@@ -1,0 +1,42 @@
+div.field-attributes{
+  overflow: initial;
+
+}
+.dropdown-menu>.active>a{
+    background-color : transparent !important;
+}
+.dropdown-menu>a{
+    border-color: transparent !important;
+
+}
+ul.multiselect-container.dropdown-menu {
+  width: inherit;
+}
+.multiselect-container>li>a>label.checkbox{
+  float: left !important;
+  width: 100%;
+  border: 1px solid;
+  border-color: #e6e6e6;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+
+}
+
+.form-row label input[type="checkbox"]{
+  /* display:inline-block;
+  vertical-align: middle; */
+  position: absolute;
+   top: 27%;
+
+
+
+}
+form .aligned ul{
+
+  margin-left:0px;
+}
+/* span.multiselect-selected-text{
+  text
+} */
