@@ -17,6 +17,7 @@ def upload_location_brandimage(instance, filename):
     return 'brand_img/%s.%s' % (slugify(instance.name), extension)
 
 class Brand(models.Model):
+    """Класс брендов"""
     name = models.CharField(max_length=100, verbose_name="Название Бренда")
     history = models.TextField(blank=True, max_length=400, verbose_name="История Бренда")
     country = CountryField(blank=True, default='CN', verbose_name="Страна происхождения")
