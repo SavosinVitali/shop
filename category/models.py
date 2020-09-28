@@ -1,13 +1,8 @@
 from django.db import models
-# from django.forms import forms
-
-from django.utils import timezone
-#from django.utils.text import slugify
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 from sorl.thumbnail import ImageField
 from django.contrib.postgres.fields import JSONField
-#from unidecode import unidecode
 from pytils.translit import slugify
 from django_countries.fields import CountryField
 
