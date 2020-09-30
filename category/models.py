@@ -6,22 +6,42 @@ from django.contrib.postgres.fields import JSONField
 from pytils.translit import slugify
 from django_countries.fields import CountryField
 
-# ------------------------------------------------------------------------
+
+
+
+
+
 def upload_location_brandimage(instance, filename):
+    print(instance)
     filebase, extension = filename.split('.')
     return 'brand_img/%s.%s' % (slugify(instance.name), extension)
 
+def upload_location_brandfile(instance, filename):
+    filebase, extension = filename.split('.')
+    return 'brand_iso/%s.%s' % (slugify(instance.name), extension)
+
 class Brand(models.Model):
     """Класс брендов"""
-    name = models.CharField(max_length=100, verbose_name="Название Бренда")
+    name = models.CharField(blank=True, max_length=100, verbose_name="Название Бренда")
     history = models.TextField(blank=True, max_length=400, verbose_name="История Бренда")
     country = CountryField(blank=True, default='CN', verbose_name="Страна происхождения")
-    iso = models.FileField(upload_to='brand/iso/', blank=True, verbose_name="Загрузите ISO Бренда")
+    iso = models.FileField(upload_to=upload_location_brandfile, blank=True, verbose_name="Загрузите ISO Бренда")
     logo = models.ImageField(blank=True, upload_to=upload_location_brandimage, verbose_name="Изображение Бренда")
 
     class Meta:
         verbose_name = "Бренд"
         verbose_name_plural = "Бренды"
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
+            old_self = Brand.objects.get(pk=self.pk)
+            if old_self.logo and self.logo != old_self.logo:
+               old_self.logo.delete(False)
+        return super(Brand, self).save(*args, **kwargs)
+
 
 class StatusManager(models.Manager):
     def get_queryset(self):
@@ -89,7 +109,6 @@ class Category(MPTTModel):
             return
 
         super(Category, self).save(*args, **kwargs)
-
 
 
 

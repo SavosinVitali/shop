@@ -1,7 +1,7 @@
 from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 from mptt.admin import TreeRelatedFieldListFilter
-from category.models import Category, Product, ProductImage, Attributes
+from category.models import Category, Product, ProductImage, Attributes, Brand
 from mptt.admin import MPTTModelAdmin
 from django.utils.html import format_html, mark_safe
 from django.forms.models import BaseModelFormSet, BaseInlineFormSet
@@ -17,7 +17,9 @@ from django.contrib.postgres.fields import JSONField
 from .forms import CategoryAdminForm, ProductAdminForm
 
 
-
+@admin.register(Brand) # регистрируем в админке приложение category
+class BrandAdmin(admin.ModelAdmin):
+    pass
 
 
 admin.site.site_title = "Админка магазина"
