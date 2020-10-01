@@ -40,6 +40,8 @@ class Brand(models.Model):
             old_self = Brand.objects.get(pk=self.pk)
             if old_self.logo and self.logo != old_self.logo:
                old_self.logo.delete(False)
+            if old_self.iso and self.iso != old_self.iso:
+               old_self.iso.delete(False)
         return super(Brand, self).save(*args, **kwargs)
 
 

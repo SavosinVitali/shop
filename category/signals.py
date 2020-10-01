@@ -6,3 +6,5 @@ from category.models import Brand
 def logo_delete(sender, instance, **kwargs):
     if instance.logo.name:
        instance.logo.delete(False)
+    if instance.iso.name:
+       instance.iso.delete(False)

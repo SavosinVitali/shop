@@ -6,4 +6,4 @@ class CategoryConfig(AppConfig):
     verbose_name = "Категории"
 
     def ready(self):
-        import category.signals
+        from category import signals
