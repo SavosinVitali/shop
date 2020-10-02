@@ -112,6 +112,8 @@ class Category(MPTTModel):
 
         super(Category, self).save(*args, **kwargs)
 
+    def get_path(self):
+        pass
 
 
 class Attributes(models.Model):
