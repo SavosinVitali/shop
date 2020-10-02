@@ -10,9 +10,9 @@ from django_countries.fields import CountryField
 
 
 
-
 def upload_location_brandimage(instance, filename):
-    print(instance)
+    print('------------4--------------')
+    print(filename)
     filebase, extension = filename.split('.')
     return 'brand_img/%s.%s' % (slugify(instance.name), extension)
 
@@ -34,16 +34,6 @@ class Brand(models.Model):
 
     def __str__(self):
         return self.name
-
-    def save(self, *args, **kwargs):
-        if self.pk is not None:
-            old_self = Brand.objects.get(pk=self.pk)
-            if old_self.logo and self.logo != old_self.logo:
-               old_self.logo.delete(False)
-            if old_self.iso and self.iso != old_self.iso:
-               old_self.iso.delete(False)
-        return super(Brand, self).save(*args, **kwargs)
-
 
 class StatusManager(models.Manager):
     def get_queryset(self):
@@ -114,7 +104,6 @@ class Category(MPTTModel):
 
     def get_path(self):
         pass
-
 
 class Attributes(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name = 'Главная категория',)
