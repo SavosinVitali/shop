@@ -28,4 +28,4 @@ def logo_add(sender, instance, **kwargs):
        if old_self.iso and instance.iso != old_self.iso:
           old_self.iso.delete(False)
        if instance.name != old_self.name:
-          pass
+          super(Brand, instance).save()
