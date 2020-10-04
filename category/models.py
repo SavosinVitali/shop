@@ -35,6 +35,13 @@ class Brand(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        print('save model')
+        print(self.name)
+        print(*args)
+        print(*kwargs)
+        super(Brand, self).save(*args, **kwargs)
+
 class StatusManager(models.Manager):
     def get_queryset(self):
         return super(StatusManager, self).get_queryset().filter(available = True) # переопределение менеджера модели

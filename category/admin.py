@@ -14,12 +14,14 @@ from django.utils import timezone
 from django.contrib.postgres import fields
 from django.contrib.postgres.fields import JSONField
 
-from .forms import CategoryAdminForm, ProductAdminForm
+from .forms import CategoryAdminForm, ProductAdminForm, BrandAdminForm
 
 
 @admin.register(Brand) # регистрируем в админке приложение category
 class BrandAdmin(admin.ModelAdmin):
-    pass
+    fields = ('name', 'logo','iso',)
+    list_display = ('name', 'logo','iso',)
+    form = BrandAdminForm
 
 
 admin.site.site_title = "Админка магазина"

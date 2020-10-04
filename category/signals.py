@@ -13,7 +13,7 @@ def logo_delete(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=Brand)
 def logo_add(sender, instance, **kwargs):
-    print(instance.pk)
+    print('signal instance pk'+ str(instance.pk))
     if instance.pk is not None:
        old_self = sender.objects.get(pk=instance.pk)
        print(old_self.logo)
@@ -23,9 +23,9 @@ def logo_add(sender, instance, **kwargs):
        print(kwargs)
        print('-----------------------------------------')
        if instance.logo != old_self.logo:
-          print('1')
+          print('delete logo')
           old_self.logo.delete(False)
        if old_self.iso and instance.iso != old_self.iso:
           old_self.iso.delete(False)
        if instance.name != old_self.name:
-          super(Brand, instance).save()
+          pass
