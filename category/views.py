@@ -1,5 +1,16 @@
 from django.shortcuts import render, get_object_or_404
+
+from .forms import BrandAdminForm
 from .models import Category, Product
+
+
+def model_form_upload(request):
+    if request.method == 'POST':
+        form = BrandAdminForm(request.POST, request.FILES)
+        print("model form")
+        if form.is_valid():
+            form.save()
+
 
 
 

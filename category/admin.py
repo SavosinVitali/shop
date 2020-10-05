@@ -16,16 +16,24 @@ from django.contrib.postgres.fields import JSONField
 
 from .forms import CategoryAdminForm, ProductAdminForm, BrandAdminForm
 
+admin.site.site_title = "Админка магазина"
+admin.site.site_header = "Админка магазина"
 
 @admin.register(Brand) # регистрируем в админке приложение category
 class BrandAdmin(admin.ModelAdmin):
-    fields = ('name', 'logo','iso',)
-    list_display = ('name', 'logo','iso',)
+    fields = ('name', 'history', 'country', 'iso', ('logo', 'get_logo'),)
+    list_display = ('name', 'country', 'get_logo',)
+    readonly_fields = ('get_logo',)
     form = BrandAdminForm
 
+    def get_logo(self, obj):
+        if obj.logo:
+            return mark_safe(f'<img src = {obj.logo.url} width="50" height="50" ')
+        else:
+            return mark_safe(f'<img src ="/media/noimg.jpg" width="50" height="50" ')
 
-admin.site.site_title = "Админка магазина"
-admin.site.site_header = "Админка магазина"
+    get_logo.short_description = "Изображение Брэнда"
+
 
 
 class ProductImageInline(AdminImageMixin, admin.TabularInline):  #  Добавляем продукты к категориям в админке

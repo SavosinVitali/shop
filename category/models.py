@@ -11,8 +11,6 @@ from django_countries.fields import CountryField
 
 
 def upload_location_brandimage(instance, filename):
-    print('------------4--------------')
-    print(filename)
     filebase, extension = filename.split('.')
     return 'brand_img/%s.%s' % (slugify(instance.name), extension)
 
@@ -35,12 +33,6 @@ class Brand(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        print('save model')
-        print(self.name)
-        print(*args)
-        print(*kwargs)
-        super(Brand, self).save(*args, **kwargs)
 
 class StatusManager(models.Manager):
     def get_queryset(self):
