@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_delete, pre_save, post_save
 from django.dispatch.dispatcher import receiver
-from category.models import Brand, upload_location_brandimage
+from category.models import Brand, upload_location_image
 from pytils.translit import slugify
 import os
 from django.conf import settings
@@ -21,8 +21,8 @@ def logo_add(sender, instance, **kwargs):
           old_self.logo.delete(False)
        if old_self.iso and instance.iso != old_self.iso:
           old_self.iso.delete(False)
-       if instance.name != old_self.name:
-          new_path = upload_location_brandimage(instance, instance.logo.name)
-          os.rename(settings.MEDIA_ROOT  + '\\' + instance.logo.name, settings.MEDIA_ROOT  + '\\' + new_path)
+       if instance.name != old_self.name and os.path.isfile(settings.MEDIA_ROOT + '\\' + instance.logo.name):
+          new_path = upload_location_image(instance, instance.logo.name)
+          os.rename(settings.MEDIA_ROOT + '\\' + instance.logo.name, settings.MEDIA_ROOT + '\\' + new_path)
           instance.logo = new_path
 

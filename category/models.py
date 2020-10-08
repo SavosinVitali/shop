@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
@@ -5,16 +6,20 @@ from sorl.thumbnail import ImageField
 from django.contrib.postgres.fields import JSONField
 from pytils.translit import slugify
 from django_countries.fields import CountryField
+from category.validations import FileValidator
 
 
 
 
-
-def upload_location_brandimage(instance, filename):
+def upload_location_image(instance, filename):
+    classen = instance.__class__.__name__
     filebase, extension = filename.split('.')
-    return 'brand_img/%s.%s' % (slugify(instance.name), extension)
+    if classen == 'ProductImage':
+        return 'product_img/%s/%s_%s.%s' % (instance.product_image.slug, instance.product_image.slug, slugify(instance.title_image), extension)
+    else:
+        return classen + '_img/%s.%s' % (slugify(instance.name), extension)
 
-def upload_location_brandfile(instance, filename):
+def upload_location_file(instance, filename):
     filebase, extension = filename.split('.')
     return 'brand_iso/%s.%s' % (slugify(instance.name), extension)
 
@@ -23,8 +28,8 @@ class Brand(models.Model):
     name = models.CharField(blank=True, max_length=100, verbose_name="Название Бренда")
     history = models.TextField(blank=True, max_length=400, verbose_name="История Бренда")
     country = CountryField(blank=True, default='CN', verbose_name="Страна происхождения")
-    iso = models.FileField(upload_to=upload_location_brandfile, blank=True, verbose_name="Загрузите ISO Бренда")
-    logo = models.ImageField(blank=True, upload_to=upload_location_brandimage, verbose_name="Изображение Бренда")
+    iso = models.FileField(upload_to=upload_location_file, blank=True, verbose_name="Загрузите ISO Бренда", validators=[FileValidator(max_size=1024 * 1000, content_types=('application/pdf',))])
+    logo = models.ImageField(blank=True, upload_to=upload_location_image, verbose_name="Изображение Бренда")
 
     class Meta:
         verbose_name = "Бренд"
@@ -38,16 +43,13 @@ class StatusManager(models.Manager):
     def get_queryset(self):
         return super(StatusManager, self).get_queryset().filter(available = True) # переопределение менеджера модели
 
-def upload_location_categoryimage(instance, filename):
-    filebase, extension = filename.split('.')
-    return 'category_img/%s.%s' % (instance.slug, extension)
 
 class Category(MPTTModel):
     name = models.CharField(max_length=50, unique=True)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     slug = models.SlugField(max_length=200, unique = True)
     available = models.BooleanField(default=True, verbose_name="Доступен")
-    image = models.ImageField(upload_to=upload_location_categoryimage, blank=True, null=True, verbose_name="Изображение категории")
+    image = models.ImageField(upload_to=upload_location_image, blank=True, null=True, verbose_name="Изображение категории")
     # attributes = JSONField(verbose_name="Атрибуты")
     # data = models.DateTimeField(auto_now_add=False, default = '2012-09-04 06:00:00.000000-08:00',verbose_name="дата")
     # data1 = models.DateField(auto_now_add=False, default = '2013-09-04',verbose_name="дата1")
@@ -164,14 +166,8 @@ class Product(models.Model):
            super(Product, self).save(*args, **kwargs)#def save(self, *args, **kwargs):
 
 
-
-
-def upload_location_productimage(instance, filename):
-    filebase, extension = filename.split('.')
-    return 'product_img/%s/%s_%s.%s' % (instance.product_image.slug,instance.product_image.slug,slugify(instance.title_image), extension)
-
 class ProductImage(models.Model):
-    image = models.ImageField(upload_to=upload_location_productimage, blank=True, null=True, verbose_name='Изображение товара')
+    image = models.ImageField(upload_to=upload_location_image, blank=True, null=True, verbose_name='Изображение товара')
     product_image = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name = 'Продукт')
     title_image = models.CharField(max_length=200, db_index=True, verbose_name="Описание изображения", null=True, blank=False)
 

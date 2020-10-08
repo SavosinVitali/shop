@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'mptt',
     'sorl.thumbnail',
     'django_countries',
+    'magic',
 
 
 
