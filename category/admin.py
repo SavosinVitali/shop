@@ -1,6 +1,8 @@
 from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 from mptt.admin import TreeRelatedFieldListFilter
+from sorl.thumbnail import get_thumbnail
+
 from category.models import Category, Product, ProductImage, Attributes, Brand
 from mptt.admin import MPTTModelAdmin
 from django.utils.html import format_html, mark_safe
@@ -33,6 +35,9 @@ class BrandAdmin(admin.ModelAdmin):
             return mark_safe(f'<img src ="/media/noimg.jpg" width="50" height="50" ')
 
     get_logo.short_description = "Изображение Брэнда"
+
+
+
 
 
 

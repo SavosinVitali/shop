@@ -19,11 +19,7 @@
           <a href="{{ node.get_absolute_url }}">{{ node.name }}</a>
 
           {% if node.image %}
-            {% thumbnail node.image "1000" as big %}
-              {% thumbnail node.image "50x50" crop="center" as small %}
-                <a href="{{ big.url}}" title="look ma!"><img src="{{ small.url }}"></a>
-              {% endthumbnail %}
-            {% endthumbnail %}
+                <a href="{{ node.get_absolute_url}}" title={{ node.name }}> <img src="{{ node.image.url }}" width="60px" height="60px"></a>
           {% else %}
              <p>no image</p>
           {% endif %}
@@ -50,7 +46,7 @@
 
 
 
-<p>________________________</p>
+<p>_______________jjjjjj_________</p>
 {% for cat in categories %}
 <li >
   <a href="{{ cat.get_absolute_url }}">{{cat.name}}</a>

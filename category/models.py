@@ -1,8 +1,9 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 from mptt.models import MPTTModel, TreeForeignKey
-from sorl.thumbnail import ImageField
+from sorl.thumbnail import ImageField, get_thumbnail
 from django.contrib.postgres.fields import JSONField
 from pytils.translit import slugify
 from django_countries.fields import CountryField
@@ -28,8 +29,10 @@ class Brand(models.Model):
     name = models.CharField(blank=True, max_length=100, verbose_name="Название Бренда")
     history = models.TextField(blank=True, max_length=400, verbose_name="История Бренда")
     country = CountryField(blank=True, default='CN', verbose_name="Страна происхождения")
-    iso = models.FileField(upload_to=upload_location_file, blank=True, verbose_name="Загрузите ISO Бренда", validators=[FileValidator(max_size=1024 * 1000, content_types=('application/pdf',))])
-    logo = models.ImageField(blank=True, upload_to=upload_location_image, verbose_name="Изображение Бренда")
+    iso = models.FileField(upload_to=upload_location_file, blank=True, verbose_name="Загрузите ISO Бренда",
+                           validators=[FileValidator(max_size=1024 * 1024 * 5, content_types=('application/pdf',))])
+    logo = models.ImageField(blank=True, upload_to=upload_location_image, verbose_name="Изображение Бренда",
+                             validators=[FileValidator(max_size=1024 * 1024 * 5, content_types=('image/jpeg', 'image/png', 'image/x-ms-bmp'))])
 
     class Meta:
         verbose_name = "Бренд"
@@ -38,6 +41,15 @@ class Brand(models.Model):
     def __str__(self):
         return self.name
 
+    # def thumb(self):
+    #     if self.logo:
+    #         t = get_thumbnail(self.logo, "50x50", crop='center', quality=99)
+    #         return mark_safe(f'<img src = {t.url} ')
+    #     else:
+    #         return u"None"
+
+    # thumb.short_description = 'Foto'
+    # thumb.allow_tags = True
 
 class StatusManager(models.Manager):
     def get_queryset(self):

@@ -3,7 +3,7 @@ from django.contrib.postgres.fields import JSONField
 import json
 from django.forms import ModelForm
 from category.models import Category, Product, Brand
-import magic
+
 
 
 

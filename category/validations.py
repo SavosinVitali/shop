@@ -1,7 +1,9 @@
+from PIL.Image import Image
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import filesizeformat
 import magic
 from django.utils.deconstruct import deconstructible
+from sorl.thumbnail import get_thumbnail
 
 
 @deconstructible
@@ -37,11 +39,13 @@ class FileValidator(object):
                                    'min_size', params)
 
         if self.content_types:
-            content_type = magic.from_buffer(data.read(), mime=True)
+            print('-----------data------------')
+            print(self)
+            content_type = magic.from_buffer(data.read(2048), mime=True)
+            print('-----------im------------')
             if content_type not in self.content_types:
                 params = {'content_type': content_type}
                 raise ValidationError(self.error_messages['content_type'], "content_type", params)
 
     def __eq__(self, other):
-        print("z тут2")
         return isinstance(other, FileValidator)
