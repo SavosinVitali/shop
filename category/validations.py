@@ -39,10 +39,7 @@ class FileValidator(object):
                                    'min_size', params)
 
         if self.content_types:
-            print('-----------data------------')
-            print(self)
             content_type = magic.from_buffer(data.read(2048), mime=True)
-            print('-----------im------------')
             if content_type not in self.content_types:
                 params = {'content_type': content_type}
                 raise ValidationError(self.error_messages['content_type'], "content_type", params)
