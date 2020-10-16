@@ -11,6 +11,7 @@ from PIL import Image
 from sorl.thumbnail import get_thumbnail
 
 def file_name_generator(instance):
+    """Функция генерирует имена файлов исходя из разрешений изображения"""
     name = []
     filebase, extension = instance.logo.name.split('.')
     sizes = [(240, 240), (960, 960)]
