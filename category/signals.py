@@ -10,13 +10,15 @@ from django.conf import settings
 from PIL import Image
 from sorl.thumbnail import get_thumbnail
 
+from shop.settings import SIZES_IMAGE
+
+
 def file_name_generator(instance):
     """Функция генерирует имена файлов исходя из разрешений изображения"""
     name = []
     filebase, extension = instance.logo.name.split('.')
-    sizes = [(240, 240), (960, 960)]
     name.append(settings.MEDIA_ROOT + '/' + instance.logo.name)
-    for size in sizes:
+    for size in SIZES_IMAGE:
         name.append(settings.MEDIA_ROOT + '/%s_%s.%s' % (filebase, size[0], extension))
     return name
 
@@ -37,7 +39,7 @@ def logo_add(sender, instance, **kwargs):
            filebase, extension = old_self.logo.name.split('.')
            sizes = [(240, 240), (960, 960)]
            old_self.logo.delete(False)
-           for size in sizes:
+           for size in SIZES_IMAGE:
                name = settings.MEDIA_ROOT + '/%s_%s.%s' % (filebase, size[0], extension)
                if os.path.isfile(name):
                    os.remove(name)
@@ -53,9 +55,9 @@ def logo_add(sender, instance, **kwargs):
 def resize_image(sender, instance, **kwargs):
     if instance.pk is not None and instance.logo:
         names = file_name_generator(instance)
-        print(names)
         for name in names:
             im = Image.open(names[0])
-            # im.thumbnail(size)
+            if names.index(name) != 0:
+                im.thumbnail(SIZES_IMAGE[names.index(name)-1])
             im.save(name)
 

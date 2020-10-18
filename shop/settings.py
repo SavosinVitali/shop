@@ -140,3 +140,4 @@ THUMBNAIL_PREFIX = 'cache/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+SIZES_IMAGE = [(240, 240), (960, 960)]
