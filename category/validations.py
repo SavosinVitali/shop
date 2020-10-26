@@ -9,6 +9,7 @@ from sorl.thumbnail import get_thumbnail
 @deconstructible
 class FileValidator(object):
     error_messages = {
+     'no_file': ("файл удален выберите другой файл либо очиститe."),
      'max_size': ("Ensure this file size is not greater than %(max_size)s."
                   " Your file size is %(size)s."),
      'min_size': ("Ensure this file size is not less than %(min_size)s. "
@@ -22,6 +23,10 @@ class FileValidator(object):
         self.content_types = content_types
 
     def __call__(self, data):
+        try: #proveryaem ne udalili li file
+            data.size
+        except:
+            raise ValidationError(self.error_messages['no_file'])
         if self.max_size is not None and data.size > self.max_size:
             params = {
                 'max_size': filesizeformat(self.max_size),
