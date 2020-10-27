@@ -16,8 +16,6 @@ from shop.settings import SIZES_IMAGE
 def file_name_generator(logo):
     """Функция генерирует имена файлов исходя из разрешений изображения"""
     name = []
-    print('logo')
-    print(logo)
     filebase, extension = logo.split('.')
     name.append(settings.MEDIA_ROOT + '/' + logo)
     for size in SIZES_IMAGE:
@@ -42,14 +40,21 @@ def logo_add(sender, instance, **kwargs):
            for name in names:
                if os.path.isfile(name):
                   os.remove(name)
+        # """Если произошло изменение имени удаляем ISO"""
        if old_self.iso and instance.iso != old_self.iso:
           old_self.iso.delete(False)
+        # """Если произошло изменение имени меняем название изображений"""
        if instance.name != old_self.name and os.path.isfile(settings.MEDIA_ROOT + '/' + instance.logo.name):
-          new_path = upload_location_image(instance, instance.logo.name)
-          os.rename(settings.MEDIA_ROOT + '/' + instance.logo.name, settings.MEDIA_ROOT + '/' + new_path)
-          instance.logo = new_path
+           new_path = upload_location_image(instance, instance.logo.name)
+           names_old = file_name_generator(old_self.logo.name)
+           names = file_name_generator(new_path)
+           instance.logo.close()
+           for name in names:
+              if os.path.isfile(names_old[names.index(name)]):
+                 os.rename(names_old[names.index(name)], name)
+           instance.logo = new_path
 
-"""delaem kopii image SIZES_IMAGE"""
+"""Делаем уменьшеные копии изображения name_SIZES_IMAGE из settings """
 @receiver(post_save, sender=Brand)
 def resize_image(sender, instance, **kwargs):
     if instance.pk is not None and instance.logo:

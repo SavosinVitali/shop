@@ -21,6 +21,7 @@ def upload_location_image(instance, filename):
         return classen + '_img/%s.%s' % (slugify(instance.name), extension)
 
 def upload_location_file(instance, filename):
+    print('upload')
     filebase, extension = filename.split('.')
     return 'brand_iso/%s.%s' % (slugify(instance.name), extension)
 
