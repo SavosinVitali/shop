@@ -23,8 +23,8 @@ admin.site.site_header = "Админка магазина"
 
 @admin.register(Brand) # регистрируем в админке приложение category
 class BrandAdmin(admin.ModelAdmin):
-    fields = ('name', 'history', 'country', 'iso', ('logo', 'get_logo'),)
-    list_display = ('name', 'country', 'get_logo',)
+    fields = ('name', 'history', 'country', ('iso', 'data_end_iso'), ('logo', 'get_logo'),)
+    list_display = ('name', 'country', 'get_logo', 'data_end_iso')
     readonly_fields = ('get_logo',)
     form = BrandAdminForm
 
@@ -34,7 +34,7 @@ class BrandAdmin(admin.ModelAdmin):
         else:
             return mark_safe(f'<img src ="/media/noimg.jpg" width="50" height="50" ')
 
-    get_logo.short_description = "Изображение Брэнда"
+    get_logo.short_description = "Текущее изображение Брэнда"
 
 
 

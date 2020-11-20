@@ -9,7 +9,17 @@ from pytils.translit import slugify
 from django_countries.fields import CountryField
 from category.validations import FileValidator
 
+class File_Storage(models.Model):
+    image = models.ImageField(upload_to=upload_location_image, blank=True, null=True, verbose_name='Изображение товара')
+    product_image = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name = 'Продукт')
+    title_image = models.CharField(max_length=200, db_index=True, verbose_name="Описание изображения", null=True, blank=False)
 
+    class Meta:
+        verbose_name = 'Изображение товара'
+        verbose_name_plural = 'Изображения товаров'
+
+    def __str__(self):
+        return self.title_image
 
 
 def upload_location_image(instance, filename):
@@ -27,13 +37,14 @@ def upload_location_file(instance, filename):
 
 class Brand(models.Model):
     """Класс брендов"""
-    name = models.CharField(blank=True, max_length=100, verbose_name="Название Бренда")
-    history = models.TextField(blank=True, max_length=400, verbose_name="История Бренда")
-    country = CountryField(blank=True, default='CN', verbose_name="Страна происхождения")
+    name = models.CharField(max_length=100, verbose_name="Название Бренда")
+    history = models.TextField(max_length=400, verbose_name="История Бренда")
+    country = CountryField(default='CN', verbose_name="Страна происхождения")
     iso = models.FileField(upload_to=upload_location_file, blank=True, verbose_name="Загрузите ISO Бренда",
-                           validators=[FileValidator(max_size=1024 * 1024 * 5, content_types=('application/pdf',))])
-    logo = models.ImageField(blank=True, upload_to=upload_location_image, verbose_name="Изображение Бренда",
-                             validators=[FileValidator(max_size=1024 * 1024 * 5, content_types=('image/jpeg', 'image/png', 'image/x-ms-bmp'))])
+                           validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('application/pdf',))])
+    data_end_iso = models.DateField(blank=True, auto_now_add=False, default='2020-01-01', verbose_name="Дата окончания ISO")
+    logo = models.ImageField(upload_to=upload_location_image, verbose_name="Изображение Бренда",
+                             validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('image/jpeg', 'image/png', 'image/x-ms-bmp'))])
 
     class Meta:
         verbose_name = "Бренд"
@@ -67,7 +78,6 @@ class Category(MPTTModel):
     # data = models.DateTimeField(auto_now_add=False, default = '2012-09-04 06:00:00.000000-08:00',verbose_name="дата")
     # data1 = models.DateField(auto_now_add=False, default = '2013-09-04',verbose_name="дата1")
 
-
     class MPTTMeta:
         order_insertion_by = ['parent_id']
 
@@ -76,8 +86,6 @@ class Category(MPTTModel):
         verbose_name_plural = 'Категории'
         unique_together = ('slug', 'parent')
         #ordering = ['id']
-
-
 
     def __str__(self):
         return self.name
