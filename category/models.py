@@ -9,18 +9,6 @@ from pytils.translit import slugify
 from django_countries.fields import CountryField
 from category.validations import FileValidator
 
-class File_Storage(models.Model):
-    image = models.ImageField(upload_to=upload_location_image, blank=True, null=True, verbose_name='Изображение товара')
-    product_image = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name = 'Продукт')
-    title_image = models.CharField(max_length=200, db_index=True, verbose_name="Описание изображения", null=True, blank=False)
-
-    class Meta:
-        verbose_name = 'Изображение товара'
-        verbose_name_plural = 'Изображения товаров'
-
-    def __str__(self):
-        return self.title_image
-
 
 def upload_location_image(instance, filename):
     classen = instance.__class__.__name__
@@ -35,6 +23,20 @@ def upload_location_file(instance, filename):
     filebase, extension = filename.split('.')
     return 'brand_iso/%s.%s' % (slugify(instance.name), extension)
 
+class File_Storage(models.Model):
+    files = models.FileField(upload_to=upload_location_file, blank=True, verbose_name="Загрузите ISO Бренда",
+                           validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('application/pdf',))])
+    title_files = models.CharField(max_length=200, db_index=True, verbose_name="Описание файла", null=True, blank=False)
+    iso2 = models.ManyToManyField('File_Storage', verbose_name='ISO2')
+
+    class Meta:
+        verbose_name = 'Хранилище файла'
+        verbose_name_plural = 'Хранилище файлов'
+
+    def __str__(self):
+        return self.title_files
+
+
 class Brand(models.Model):
     """Класс брендов"""
     name = models.CharField(max_length=100, verbose_name="Название Бренда")
@@ -45,6 +47,7 @@ class Brand(models.Model):
     data_end_iso = models.DateField(blank=True, auto_now_add=False, default='2020-01-01', verbose_name="Дата окончания ISO")
     logo = models.ImageField(upload_to=upload_location_image, verbose_name="Изображение Бренда",
                              validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('image/jpeg', 'image/png', 'image/x-ms-bmp'))])
+
 
     class Meta:
         verbose_name = "Бренд"

@@ -3,7 +3,7 @@ from mptt.admin import DraggableMPTTAdmin
 from mptt.admin import TreeRelatedFieldListFilter
 from sorl.thumbnail import get_thumbnail
 
-from category.models import Category, Product, ProductImage, Attributes, Brand
+from category.models import Category, Product, ProductImage, Attributes, Brand, File_Storage
 from mptt.admin import MPTTModelAdmin
 from django.utils.html import format_html, mark_safe
 from django.forms.models import BaseModelFormSet, BaseInlineFormSet
@@ -21,11 +21,18 @@ from .forms import CategoryAdminForm, ProductAdminForm, BrandAdminForm
 admin.site.site_title = "Админка магазина"
 admin.site.site_header = "Админка магазина"
 
+class File_StorageInline(AdminImageMixin, admin.TabularInline):  #  Добавляем продукты к категориям в админке
+    model = File_Storage
+    extra = 0
+    fields = ('files', 'title_files', )
+
+
 @admin.register(Brand) # регистрируем в админке приложение category
 class BrandAdmin(admin.ModelAdmin):
     fields = ('name', 'history', 'country', ('iso', 'data_end_iso'), ('logo', 'get_logo'),)
     list_display = ('name', 'country', 'get_logo', 'data_end_iso')
     readonly_fields = ('get_logo',)
+    inlines = (File_StorageInline,)  # Добавляем продукты к категориям в админ
     form = BrandAdminForm
 
     def get_logo(self, obj):
@@ -168,7 +175,7 @@ class CategoryAdmin(AdminImageMixin, DraggableMPTTAdmin):
 
 @admin.register(Product) # регистрируем в админке приложение category
 class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
-    list_display = ( 'name', 'type_product', 'category' , 'slug' , 'slug_home', 'stock', 'available', 'created', 'get_image', ) # задаем какие поля в админке будут отображаться
+    list_display = ('name', 'type_product', 'category' , 'slug' , 'slug_home', 'stock', 'available', 'created', 'get_image', ) # задаем какие поля в админке будут отображаться
     fields = ('category','type_product', ('name','available') , ('slug', 'slug_home'), ('stock','price'), ('created', 'updated'), )
     prepopulated_fields = {'slug': ('name',)}# поле slug заполняется из поля name
     raw_id_fields = ('category' ,) # добавляет поиск при создании данного поля
