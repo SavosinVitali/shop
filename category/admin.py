@@ -17,15 +17,15 @@ from django.contrib.postgres import fields
 from django.contrib.postgres.fields import JSONField
 
 from .forms import CategoryAdminForm, ProductAdminForm, BrandAdminForm
+from django.contrib.contenttypes.admin import GenericTabularInline
 
 admin.site.site_title = "Админка магазина"
 admin.site.site_header = "Админка магазина"
 
-class File_StorageInline(AdminImageMixin, admin.TabularInline):  #  Добавляем продукты к категориям в админке
+class File_StorageInline(AdminImageMixin, GenericTabularInline):  #  Добавляем продукты к категориям в админке
     model = File_Storage
-    extra = 0
-    fields = ('files', 'title_files', )
-
+    ct_fk_field = "object_id"
+    ct_field = "content_type"
 
 @admin.register(Brand) # регистрируем в админке приложение category
 class BrandAdmin(admin.ModelAdmin):

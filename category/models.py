@@ -1,4 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -19,15 +20,17 @@ def upload_location_image(instance, filename):
         return classen + '_img/%s.%s' % (slugify(instance.name), extension)
 
 def upload_location_file(instance, filename):
-    print('upload')
+    print(instance)
     filebase, extension = filename.split('.')
     return 'brand_iso/%s.%s' % (slugify(instance.name), extension)
 
 class File_Storage(models.Model):
-    files = models.FileField(upload_to=upload_location_file, blank=True, verbose_name="Загрузите ISO Бренда",
+    files = models.FileField(blank=True, verbose_name="Загрузите ISO Бренда",
                            validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('application/pdf',))])
     title_files = models.CharField(max_length=200, db_index=True, verbose_name="Описание файла", null=True, blank=False)
-    iso2 = models.ManyToManyField('File_Storage', verbose_name='ISO2')
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
 
     class Meta:
         verbose_name = 'Хранилище файла'
