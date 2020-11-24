@@ -11,6 +11,7 @@ from django_countries.fields import CountryField
 from category.validations import FileValidator
 
 
+
 def upload_location_image(instance, filename):
     classen = instance.__class__.__name__
     filebase, extension = filename.split('.')
@@ -20,12 +21,11 @@ def upload_location_image(instance, filename):
         return classen + '_img/%s.%s' % (slugify(instance.name), extension)
 
 def upload_location_file(instance, filename):
-    print(instance)
     filebase, extension = filename.split('.')
-    return 'brand_iso/%s.%s' % (slugify(instance.name), extension)
+    return 'file_storage/%s/%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.content_object), extension)
 
 class File_Storage(models.Model):
-    files = models.FileField(blank=True, verbose_name="Загрузите ISO Бренда",
+    files = models.FileField(upload_to=upload_location_file, blank=True, verbose_name="Загрузите ISO Бренда",
                            validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('application/pdf',))])
     title_files = models.CharField(max_length=200, db_index=True, verbose_name="Описание файла", null=True, blank=False)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
