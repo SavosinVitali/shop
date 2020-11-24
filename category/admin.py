@@ -24,8 +24,9 @@ admin.site.site_header = "Админка магазина"
 
 class File_StorageInline(AdminImageMixin, GenericTabularInline):  #  Добавляем продукты к категориям в админке
     model = File_Storage
-    ct_fk_field = "object_id"
-    ct_field = "content_type"
+    extra = 0
+    # ct_fk_field = "object_id"
+    # ct_field = "content_type"
 
 @admin.register(Brand) # регистрируем в админке приложение category
 class BrandAdmin(admin.ModelAdmin):

@@ -25,7 +25,16 @@ def upload_location_file(instance, filename):
     return 'file_storage/%s/%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.content_object), extension)
 
 class File_Storage(models.Model):
-    files = models.FileField(upload_to=upload_location_file, blank=True, verbose_name="Загрузите ISO Бренда",
+
+    # def __init__(self, *args, **kwargs):
+    #     super(File_Storage, self).__init__(*args, **kwargs)
+    #     # some logic in here
+    #     print(self.content_object)
+    #     print(self.object_id)
+    #     print("_______________________________________")
+    #     self._meta.get_field('files').verbose_name = ('Загрузите файл  ' + str(self.content_object.__class__.__name__))
+
+    files = models.FileField(upload_to=upload_location_file, blank=True, verbose_name="Имя файла",
                            validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('application/pdf',))])
     title_files = models.CharField(max_length=200, db_index=True, verbose_name="Описание файла", null=True, blank=False)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
@@ -34,7 +43,7 @@ class File_Storage(models.Model):
 
     class Meta:
         verbose_name = 'Хранилище файла'
-        verbose_name_plural = 'Хранилище файлов'
+        verbose_name_plural = "Хранилище файлов"
 
     def __str__(self):
         return self.title_files
