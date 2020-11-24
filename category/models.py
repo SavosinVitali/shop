@@ -14,15 +14,18 @@ from category.validations import FileValidator
 
 def upload_location_image(instance, filename):
     classen = instance.__class__.__name__
-    filebase, extension = filename.split('.')
+    filebase, extension = filename.rsplit('.', maxsplit=1)
     if classen == 'ProductImage':
         return 'product_img/%s/%s_%s.%s' % (instance.product_image.slug, instance.product_image.slug, slugify(instance.title_image), extension)
     else:
         return classen + '_img/%s.%s' % (slugify(instance.name), extension)
 
 def upload_location_file(instance, filename):
-    filebase, extension = filename.split('.')
-    return 'file_storage/%s/%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.content_object), extension)
+    filebase, extension = filename.rsplit('.', maxsplit=1)
+    print(instance.id)
+    print(instance.object_id)
+    print('___________')
+    return 'file_storage/%s/%s_%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.content_object),instance.pk, extension)
 
 class File_Storage(models.Model):
 
@@ -34,7 +37,7 @@ class File_Storage(models.Model):
     #     print("_______________________________________")
     #     self._meta.get_field('files').verbose_name = ('Загрузите файл  ' + str(self.content_object.__class__.__name__))
 
-    files = models.FileField(upload_to=upload_location_file, blank=True, verbose_name="Имя файла",
+    files = models.FileField(upload_to=upload_location_file, blank=False, verbose_name="Имя файла",
                            validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('application/pdf',))])
     title_files = models.CharField(max_length=200, db_index=True, verbose_name="Описание файла", null=True, blank=False)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
