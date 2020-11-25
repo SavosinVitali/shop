@@ -25,8 +25,13 @@ admin.site.site_header = "Админка магазина"
 class File_StorageInline(AdminImageMixin, GenericTabularInline):  #  Добавляем продукты к категориям в админке
     model = File_Storage
     extra = 0
-    # ct_fk_field = "object_id"
-    # ct_field = "content_type"
+    # view_on_site = False  # Ссылка смотреть на сайте get_absolute_url
+    # can_delete = False  # можно ли удалять со страницы категорий товары
+    # show_change_link = True  # ссылка на страницу редактирования товара
+    max_num = 4
+    # original = False
+    # # ct_fk_field = "object_id"
+    # # ct_field = "content_type"
 
 @admin.register(Brand) # регистрируем в админке приложение category
 class BrandAdmin(admin.ModelAdmin):

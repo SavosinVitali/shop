@@ -67,8 +67,8 @@ def resize_image(sender, instance, **kwargs):
 
 @receiver(pre_save, sender = File_Storage)
 def logo_add(sender, instance, **kwargs):
-    print('instance')
-    print(instance)
+    # print('instance')
+    # print(instance)
     pass
     # if instance.pk is not None:
     #    old_self = sender.objects.get(pk=instance.pk)

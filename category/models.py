@@ -1,5 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.db import models
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -22,20 +22,16 @@ def upload_location_image(instance, filename):
 
 def upload_location_file(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
+    original = File_Storage.objects.filter(object_id=instance.object_id).count()
+    print('___________')
+    print(original)
     print(instance.id)
     print(instance.object_id)
+    print(instance.content_object)
     print('___________')
-    return 'file_storage/%s/%s_%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.content_object),instance.pk, extension)
+    return 'file_storage/%s/%s_%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.content_object),original, extension)
 
 class File_Storage(models.Model):
-
-    # def __init__(self, *args, **kwargs):
-    #     super(File_Storage, self).__init__(*args, **kwargs)
-    #     # some logic in here
-    #     print(self.content_object)
-    #     print(self.object_id)
-    #     print("_______________________________________")
-    #     self._meta.get_field('files').verbose_name = ('Загрузите файл  ' + str(self.content_object.__class__.__name__))
 
     files = models.FileField(upload_to=upload_location_file, blank=False, verbose_name="Имя файла",
                            validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('application/pdf',))])
@@ -62,6 +58,7 @@ class Brand(models.Model):
     data_end_iso = models.DateField(blank=True, auto_now_add=False, default='2020-01-01', verbose_name="Дата окончания ISO")
     logo = models.ImageField(upload_to=upload_location_image, verbose_name="Изображение Бренда",
                              validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('image/jpeg', 'image/png', 'image/x-ms-bmp'))])
+    files = GenericRelation(File_Storage)
 
 
     class Meta:
