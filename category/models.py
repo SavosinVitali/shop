@@ -68,15 +68,6 @@ class Brand(models.Model):
     def __str__(self):
         return self.name
 
-    # def thumb(self):
-    #     if self.logo:
-    #         t = get_thumbnail(self.logo, "50x50", crop='center', quality=99)
-    #         return mark_safe(f'<img src = {t.url} ')
-    #     else:
-    #         return u"None"
-
-    # thumb.short_description = 'Foto'
-    # thumb.allow_tags = True
 
 class StatusManager(models.Manager):
     def get_queryset(self):
