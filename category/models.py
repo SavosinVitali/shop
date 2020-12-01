@@ -9,7 +9,7 @@ from django.contrib.postgres.fields import JSONField
 from pytils.translit import slugify
 from django_countries.fields import CountryField
 from category.validations import FileValidator
-
+from file_storage.models import File_Storage
 
 
 def upload_location_image(instance, filename):
@@ -20,32 +20,32 @@ def upload_location_image(instance, filename):
     else:
         return classen + '_img/%s.%s' % (slugify(instance.name), extension)
 
-def upload_location_file(instance, filename):
-    filebase, extension = filename.rsplit('.', maxsplit=1)
-    original = File_Storage.objects.filter(object_id=instance.object_id).count()
-    print('___________')
-    print(original)
-    print(instance.id)
-    print(instance.object_id)
-    print(instance.content_object)
-    print('___________')
-    return 'file_storage/%s/%s_%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.content_object),original, extension)
-
-class File_Storage(models.Model):
-
-    files = models.FileField(upload_to=upload_location_file, blank=False, verbose_name="Имя файла",
-                           validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('application/pdf',))])
-    title_files = models.CharField(max_length=200, db_index=True, verbose_name="Описание файла", null=True, blank=False)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey("content_type", "object_id")
-
-    class Meta:
-        verbose_name = 'Хранилище файла'
-        verbose_name_plural = "Хранилище файлов"
-
-    def __str__(self):
-        return self.title_files
+# def upload_location_file(instance, filename):
+#     filebase, extension = filename.rsplit('.', maxsplit=1)
+#     original = File_Storage.objects.filter(object_id=instance.object_id).count()
+#     print('___________')
+#     print(original)
+#     print(instance.id)
+#     print(instance.object_id)
+#     print(instance.content_object)
+#     print('___________')
+#     return 'file_storage/%s/%s_%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.content_object),original, extension)
+#
+# class File_Storage(models.Model):
+#
+#     files = models.FileField(upload_to=upload_location_file, blank=False, verbose_name="Имя файла",
+#                            validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('application/pdf',))])
+#     title_files = models.CharField(max_length=200, db_index=True, verbose_name="Описание файла", null=True, blank=False)
+#     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+#     object_id = models.PositiveIntegerField()
+#     content_object = GenericForeignKey("content_type", "object_id")
+#
+#     class Meta:
+#         verbose_name = 'Хранилище файла'
+#         verbose_name_plural = "Хранилище файлов"
+#
+#     def __str__(self):
+#         return self.title_files
 
 
 class Brand(models.Model):
@@ -53,7 +53,7 @@ class Brand(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название Бренда")
     history = models.TextField(max_length=400, verbose_name="История Бренда")
     country = CountryField(default='CN', verbose_name="Страна происхождения")
-    iso = models.FileField(upload_to=upload_location_file, blank=True, verbose_name="Загрузите ISO Бренда",
+    iso = models.FileField(blank=True, verbose_name="Загрузите ISO Бренда",
                            validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('application/pdf',))])
     data_end_iso = models.DateField(blank=True, auto_now_add=False, default='2020-01-01', verbose_name="Дата окончания ISO")
     logo = models.ImageField(upload_to=upload_location_image, verbose_name="Изображение Бренда",

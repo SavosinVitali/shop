@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'category.apps.CategoryConfig',
+    'file_storage.apps.FileStorageConfig',
     'mptt',
     'sorl.thumbnail',
     'django_countries',

@@ -3,7 +3,9 @@ from mptt.admin import DraggableMPTTAdmin
 from mptt.admin import TreeRelatedFieldListFilter
 from sorl.thumbnail import get_thumbnail
 
-from category.models import Category, Product, ProductImage, Attributes, Brand, File_Storage
+from category.models import Category, Product, ProductImage, Attributes, Brand
+from file_storage.admin import File_StorageInline
+from file_storage.models import File_Storage
 from mptt.admin import MPTTModelAdmin
 from django.utils.html import format_html, mark_safe
 from django.forms.models import BaseModelFormSet, BaseInlineFormSet
@@ -21,17 +23,6 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 
 admin.site.site_title = "Админка магазина"
 admin.site.site_header = "Админка магазина"
-
-class File_StorageInline(AdminImageMixin, GenericTabularInline):  #  Добавляем продукты к категориям в админке
-    model = File_Storage
-    extra = 0
-    # view_on_site = False  # Ссылка смотреть на сайте get_absolute_url
-    # can_delete = False  # можно ли удалять со страницы категорий товары
-    # show_change_link = True  # ссылка на страницу редактирования товара
-    max_num = 4
-    # original = False
-    # # ct_fk_field = "object_id"
-    # # ct_field = "content_type"
 
 @admin.register(Brand) # регистрируем в админке приложение category
 class BrandAdmin(admin.ModelAdmin):
