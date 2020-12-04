@@ -9,8 +9,10 @@ from file_storage.validations import FileValidator
 
 def upload_location_file(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
-    original = File_Storage.objects.filter(object_id=instance.object_id).count()
-    return 'file_storage/%s/%s_%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.content_object),original, extension)
+    classen = instance.content_object.__class__.__name__
+    if classen == 'Brand':
+       return 'file_storage/%s/%s_%s_%s.%s' % (slugify(instance.content_object.__class__.__name__),slugify(instance.title_files),
+                                            slugify(instance.content_object), slugify(instance.file_type), extension)
 
 class File_Type(models.Model):
     name = models.CharField(max_length=200, unique=True, verbose_name="Название типа файла")
@@ -29,8 +31,9 @@ class File_Storage(models.Model):
     files = models.FileField(upload_to=upload_location_file,
                              blank=False, verbose_name="Имя файла",
                            validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('application/pdf',))])
-    title_files = models.CharField(max_length=200, db_index=True, verbose_name="Описание файла", null=True, blank=False)
-    file_type = models.ForeignKey(File_Type, on_delete=models.CASCADE, verbose_name="Тип файла")
+    title_files = models.CharField(max_length=200, verbose_name="Название файла", null=True, blank=False, unique = True)
+    date_files = models.DateField(auto_now=True, verbose_name='Дата')
+    file_type = models.ForeignKey(File_Type, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Тип файла")
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name="К чему относится файл")
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey("content_type", "object_id")

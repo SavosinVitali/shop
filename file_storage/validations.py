@@ -16,6 +16,7 @@ class FileValidator(object):
         self.max_size = max_size
         self.min_size = min_size
         self.content_types = content_types
+        print("Validations")
 
     def __call__(self, data):
         # проверяем не удалили файл
@@ -26,6 +27,7 @@ class FileValidator(object):
         # проверяем разрешение файла
         if self.content_types:
             temp_file = data.read(2048)
+            print("Validations2")
             content_type = magic.from_buffer(temp_file, mime=True)
             if content_type not in self.content_types:
                 params = {'content_type': content_type,

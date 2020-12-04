@@ -1,21 +1,20 @@
 
 from django.db.models.signals import post_delete, pre_save, post_save
 from django.dispatch.dispatcher import receiver
-from category.models import Brand, upload_location_image, File_Storage
+from file_storage.models import File_Storage, upload_location_file
 import os
 from django.conf import settings
 from PIL import Image
 from shop.settings import SIZES_IMAGE
 #
 #
-# def file_name_generator(logo):
+# def file_name_generator(filename):
 #     """Функция генерирует имена файлов исходя из разрешений изображения"""
-#     name = []
-#     filebase, extension = logo.split('.')
-#     name.append(settings.MEDIA_ROOT + '/' + logo)
-#     for size in SIZES_IMAGE:
-#         name.append(settings.MEDIA_ROOT + '/%s_%s.%s' % (filebase, size[0], extension))
-#     return name
+#
+#     filebase, extension = filename.url.rsplit('.', maxsplit=1)
+#     print(filebase)
+#     print(extension)
+#     return filebase
 #
 #
 # # @receiver(post_delete, sender=Brand)
@@ -26,12 +25,14 @@ from shop.settings import SIZES_IMAGE
 # #     if instance.iso.name:
 # #        instance.iso.delete(False)
 #
-# @receiver(pre_save, sender=Brand)
-# def logo_add(sender, instance, **kwargs):
+# @receiver(pre_save, sender=File_Storage)
+# def file_add(sender, instance, **kwargs):
+#     print('prisave file')
+#     print(instance)
 #     if instance.pk is not None:
 #        old_self = sender.objects.get(pk=instance.pk)
-#        if old_self.logo and instance.logo != old_self.logo:
-#            names = file_name_generator(old_self.logo.name)
+#        if old_self.title_files and instance.title_files != old_self.title_files:
+#            names = file_name_generator(old_self.title_files)
 #            for name in names:
 #                if os.path.isfile(name):
 #                   os.remove(name)
@@ -60,18 +61,23 @@ from shop.settings import SIZES_IMAGE
 #                 im.thumbnail(SIZES_IMAGE[names.index(name)-1])
 #             im.save(name)
 #
-# @receiver(pre_save, sender = File_Storage)
-# def logo_add(sender, instance, **kwargs):
-#     # print('instance')
-#     # print(instance)
-#     pass
-#     # if instance.pk is not None:
-#     #    old_self = sender.objects.get(pk=instance.pk)
-#     #    if old_self.logo and instance.logo != old_self.logo:
-#     #        names = file_name_generator(old_self.logo.name)
-#     #        for name in names:
-#     #            if os.path.isfile(name):
-#     #               os.remove(name)
+@receiver(pre_save, sender = File_Storage)
+def file_rename(sender, instance, **kwargs):
+    print('instance')
+    print(instance)
+    if instance.pk is not None:
+       old_self = sender.objects.get(pk=instance.pk)
+       if old_self.title_files and instance.title_files != old_self.title_files:
+           print('ya')
+           # print(old_self.title_files)
+           names = upload_location_file(instance, old_self.files.url)
+           print(settings.MEDIA_ROOT + '/' + names)
+           print(settings.MEDIA_ROOT + '/' + str(old_self.files))
+           if os.path.isfile(settings.MEDIA_ROOT + '/' + str(old_self.files)):
+              os.rename(settings.MEDIA_ROOT + '/' + str(old_self.files), settings.MEDIA_ROOT + '/' + names)
+    #        for name in names:
+    #            if os.path.isfile(name):
+    #               os.remove(name)
 #     #     # """Если произошло изменение имени удаляем ISO"""
 #     #    if old_self.iso and instance.iso != old_self.iso:
 #     #       old_self.iso.delete(False)
