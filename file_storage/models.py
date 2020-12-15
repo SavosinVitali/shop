@@ -10,8 +10,7 @@ from file_storage.validations import FileValidator
 def upload_location_file(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
     classen = instance.content_object.__class__.__name__
-    if classen == 'Brand':
-       return 'file_storage/%s/%s_%s_%s.%s' % (slugify(instance.content_object.__class__.__name__),slugify(instance.title_files),
+    return 'file_storage/%s/%s_%s_%s.%s' % (slugify(instance.content_object.__class__.__name__),slugify(instance.title_files),
                                             slugify(instance.content_object), slugify(instance.file_type), extension)
 
 class File_Type(models.Model):

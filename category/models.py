@@ -171,6 +171,7 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
     objects = models.Manager() # менеджер по умолчанию
     published = StatusManager() # переопределение менеджера модели
+    files = GenericRelation(File_Storage)
 
 
     class Meta:

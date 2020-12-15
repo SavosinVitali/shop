@@ -178,7 +178,7 @@ class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
     raw_id_fields = ('category' ,) # добавляет поиск при создании данного поля
     list_editable = ('available','stock')
     readonly_fields = ('slug_home', 'created', 'updated') #  поля которые не редактируются
-    inlines = (ProductImageInline,)  #  Добавляем продукты к категориям в админ
+    inlines = (File_StorageInline,)  #  Добавляем продукты к категориям в админ
     form = ProductAdminForm
 
     def get_image(self, obj):
