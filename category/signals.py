@@ -59,8 +59,6 @@ from sorl.thumbnail import get_thumbnail
 @receiver(post_save, sender=Brand)
 def file_storage_resave(sender, instance, **kwargs):
     if instance.pk is not None:
-        print('postsave brand')
-        print(instance.pk)
         for name in instance.files.all():
             name.files.close()
             name.save()

@@ -28,8 +28,7 @@ class FileValidator(object):
         except:
             raise ValidationError(self.error_messages['no_file'])
         # проверяем разрешение файла
-        if self.content_types:
-            print('Validator')
+        if self.content_types and not data.closed:
             content_type = magic.from_buffer(data.read(1024), mime=True)
             if content_type not in self.content_types:
                      params = {'content_type': content_type,

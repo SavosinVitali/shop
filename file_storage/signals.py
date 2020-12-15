@@ -22,30 +22,19 @@ from django.conf import settings
 
 @receiver(pre_save, sender = File_Storage)
 def file_rename(sender, instance, **kwargs):
-    print('presave_filestorage')
-    print(instance.content_object)
     if instance.pk is not None:
-       old_self = sender.objects.get(pk=instance.pk)
-       # если поменялось название и не изменился файл
-       # if old_self.title_files and instance.title_files != old_self.title_files and old_self.files == instance.files or \
-       #    instance.file_type != old_self.file_type and old_self.files == instance.files:
-       names = upload_location_file(instance, old_self.files.url)
+        old_self = sender.objects.get(pk=instance.pk)
+        # если поменялось название и не изменился файл
+        # if old_self.title_files and instance.title_files != old_self.title_files and old_self.files == instance.files or \
+        #     instance.file_type != old_self.file_type and old_self.files == instance.files:
+        names = upload_location_file(instance, old_self.files.url)
+        if os.path.isfile(settings.MEDIA_ROOT + '/' + old_self.files.name) and instance.files.closed:
+            if settings.MEDIA_ROOT + '/' + old_self.files.name != settings.MEDIA_ROOT + '/' + names:
+                os.replace(settings.MEDIA_ROOT + '/' + old_self.files.name, settings.MEDIA_ROOT + '/' + names)
+                instance.files = names
 
-       if os.path.isfile(settings.MEDIA_ROOT + '/' + old_self.files.name):
-              print('-----------2222222222222222222222222-----------')
-              print(instance.files.closed)
-              print(settings.MEDIA_ROOT + '/' + old_self.files.name)
-              print(settings.MEDIA_ROOT + '/' + names)
-              file = open(settings.MEDIA_ROOT + '/' + old_self.files.name)
-              file.close()
-              print(file)
-              # os.replace(settings.MEDIA_ROOT + '/' + old_self.files.name, settings.MEDIA_ROOT + '/' + names)
-              # instance.files = names
-              print('-----------33333333333333333333333333-----------')
-
-
-       if  old_self.files and old_self.files != instance.files:
-           old_self.files.delete(False)
+        if  old_self.files and old_self.files != instance.files:
+            old_self.files.delete(False)
 
 @receiver(post_delete, sender=File_Storage)
 def file_delete(sender, instance, **kwargs):
