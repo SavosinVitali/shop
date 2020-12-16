@@ -25,8 +25,8 @@ urlpatterns = [
 
 
     path('admin', admin.site.urls),
-    re_path(r'^favicon/.ico$', RedirectView.as_view(url='/static/favicon.ico', permanent=True)), #картинка favicon.ico
-    #re_path(r'^favicon\.ico$', RedirectView.as_view(url=settings.MEDIA_URL + 'Path_to_favicon_file')),
+    # re_path(r'^favicon/.ico$', RedirectView.as_view(url='/static/favicon.ico', permanent=True)), #картинка favicon.ico
+    re_path(r'^favicon\.ico$', RedirectView.as_view(url=settings.MEDIA_URL + 'Path_to_favicon_file')),
     # path('', include('category.urls' ))
 
 

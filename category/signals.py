@@ -3,7 +3,7 @@ from typing import List, Tuple
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_delete, pre_save, post_save
 from django.dispatch.dispatcher import receiver
-from category.models import Brand, upload_location_image, File_Storage
+from category.models import Brand, Product ,upload_location_image, File_Storage
 from pytils.translit import slugify
 import os
 from django.conf import settings
@@ -56,12 +56,20 @@ from sorl.thumbnail import get_thumbnail
 #            instance.logo = new_path
 
 """Делаем уменьшеные копии изображения name_SIZES_IMAGE из settings """
+@receiver(post_save, sender=Product)
 @receiver(post_save, sender=Brand)
-def file_storage_resave(sender, instance, **kwargs):
+def file_storage_resave_brand(sender, instance, **kwargs):
     if instance.pk is not None:
         for name in instance.files.all():
             name.files.close()
             name.save()
+
+# @receiver(post_save, sender=Product)
+# def file_storage_resave_product(sender, instance, **kwargs):
+#     if instance.pk is not None:
+#         for name in instance.files.all():
+#             name.files.close()
+#             name.save()
 # def resize_image(sender, instance, **kwargs):
 #     if instance.pk is not None and instance.logo:
 #         names = file_name_generator(instance.logo.name)
