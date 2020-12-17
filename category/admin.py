@@ -4,7 +4,7 @@ from mptt.admin import TreeRelatedFieldListFilter
 from sorl.thumbnail import get_thumbnail
 
 from category.models import Category, Product, ProductImage, Attributes, Brand
-from file_storage.admin import File_StorageInline
+from file_storage.admin import File_StorageInline, Image_StorageInline
 from file_storage.models import File_Storage
 from mptt.admin import MPTTModelAdmin
 from django.utils.html import format_html, mark_safe
@@ -29,7 +29,7 @@ class BrandAdmin(admin.ModelAdmin):
     fields = ('name', 'history', 'country', ('iso', 'data_end_iso'), ('logo', 'get_logo'),)
     list_display = ('name', 'country', 'get_logo', 'data_end_iso')
     readonly_fields = ('get_logo',)
-    inlines = (File_StorageInline,)  # Добавляем продукты к категориям в админ
+    inlines = (File_StorageInline,Image_StorageInline,)  # Добавляем продукты к категориям в админ
     form = BrandAdminForm
 
     def get_logo(self, obj):

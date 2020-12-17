@@ -10,8 +10,14 @@ from file_storage.validations import FileValidator
 def upload_location_file(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
     classen = instance.content_object.__class__.__name__
-    return 'file_storage/%s/%s_%s_%s.%s' % (slugify(instance.content_object.__class__.__name__),slugify(instance.title_files),
-                                            slugify(instance.content_object), slugify(instance.file_type), extension)
+    return 'file_storage/%s/%s_%s_%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.title_files),
+                                                   slugify(instance.content_object), slugify(instance.file_type), extension)
+
+def upload_location_image(instance, filename):
+    filebase, extension = filename.rsplit('.', maxsplit=1)
+    classen = instance.content_object.__class__.__name__
+    return 'file_storage/%s/%s_%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.title_image),
+                                            slugify(instance.content_object), extension)
 
 class File_Type(models.Model):
     name = models.CharField(max_length=200, unique=True, verbose_name="Название типа файла")
@@ -38,9 +44,24 @@ class File_Storage(models.Model):
     content_object = GenericForeignKey("content_type", "object_id")
 
     class Meta:
-        verbose_name = 'Хранилище файла'
-        verbose_name_plural = "Хранилище файлов"
+        verbose_name = 'Файл'
+        verbose_name_plural = "Файлы"
 
     def __str__(self):
         return self.title_files
 
+class Image_Storage(models.Model):
+    image = models.ImageField(upload_to=upload_location_image, blank=True, null=True, verbose_name='Изображение',
+                              validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('image/jpeg', 'image/png', 'image/x-ms-bmp'))])
+    title_image = models.CharField(max_length=200, db_index=True, verbose_name="Описание изображения", null=True, blank=False)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name="К чему относится файл")
+    resize = models.BooleanField(default=True, verbose_name="Делать миниатюры изображений")
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
+
+    class Meta:
+        verbose_name = 'Изображение'
+        verbose_name_plural = 'Изображения'
+
+    def __str__(self):
+        return self.title_image

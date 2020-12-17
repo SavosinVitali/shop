@@ -9,7 +9,7 @@ from django.contrib.postgres.fields import JSONField
 from pytils.translit import slugify
 from django_countries.fields import CountryField
 from category.validations import FileValidator
-from file_storage.models import File_Storage
+from file_storage.models import File_Storage, Image_Storage
 
 
 def upload_location_image(instance, filename):
@@ -172,6 +172,7 @@ class Product(models.Model):
     objects = models.Manager() # менеджер по умолчанию
     published = StatusManager() # переопределение менеджера модели
     files = GenericRelation(File_Storage)
+    image = GenericRelation(Image_Storage)
 
 
     class Meta:
