@@ -10,13 +10,13 @@ from file_storage.validations import FileValidator
 def upload_location_file(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
     classen = instance.content_object.__class__.__name__
-    return 'file_storage/%s/%s_%s_%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.title_files),
+    return 'file_storage/%s/%s/files/%s_%s_%s.%s' % (slugify(instance.content_object.__class__.__name__),  slugify(instance.content_object), slugify(instance.title_files),
                                                    slugify(instance.content_object), slugify(instance.file_type), extension)
 
 def upload_location_image(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
     classen = instance.content_object.__class__.__name__
-    return 'file_storage/%s/%s_%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.title_image),
+    return 'file_storage/%s/%s/images/%s_%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.content_object), slugify(instance.title_image),
                                             slugify(instance.content_object), extension)
 
 class File_Type(models.Model):

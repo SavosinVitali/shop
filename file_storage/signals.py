@@ -3,20 +3,32 @@ from django.dispatch.dispatcher import receiver
 from file_storage.models import File_Storage, upload_location_file, Image_Storage, upload_location_image
 import os
 from django.conf import settings
+from pytils.translit import slugify
 
-# def file_rename_1(instance):
-#     print('file_rename 1')
-#     print(instance.files.url)
-#     names = upload_location_file(instance, instance.files.url)
-#     instance.files.close()
-#     if os.path.isfile(settings.MEDIA_ROOT + '/' + instance.files.name):
-#         print(settings.MEDIA_ROOT + '/' + instance.files.name)
-#         print(settings.MEDIA_ROOT + '/' + names)
-#         instance.files.close()
-#         os.renames(settings.MEDIA_ROOT + '/' + instance.files.name, settings.MEDIA_ROOT + '/' + names)
-#         print('22222222222222222222222222222222222222222222222222222')
-#         instance.files = names
+# def file_name_generator(logo):
+#     """Функция генерирует имена файлов исходя из разрешений изображения"""
+#     name = []
+#     filebase, extension = logo.split('.')
+#     name.append(settings.MEDIA_ROOT + '/' + logo)
+#     for size in SIZES_IMAGE:
+#         name.append(settings.MEDIA_ROOT + '/%s_%s.%s' % (filebase, size[0], extension))
+#     return name
 
+
+# @receiver(post_save, sender=Product)
+# def file_storage_resave_product(sender, instance, **kwargs):
+#     if instance.pk is not None:
+#         for name in instance.files.all():
+#             name.files.close()
+#             name.save()
+# def resize_image(sender, instance, **kwargs):
+#     if instance.pk is not None and instance.logo:
+#         names = file_name_generator(instance.logo.name)
+#         for name in names:
+#             im = Image.open(names[0])
+#             if names.index(name) != 0:
+#                 im.thumbnail(SIZES_IMAGE[names.index(name)-1])
+#             im.save(name)
 
 
 
@@ -30,7 +42,7 @@ def file_rename(sender, instance, **kwargs):
         names = upload_location_file(instance, old_self.files.url)
         if os.path.isfile(settings.MEDIA_ROOT + '/' + old_self.files.name) and instance.files.closed:
             if settings.MEDIA_ROOT + '/' + old_self.files.name != settings.MEDIA_ROOT + '/' + names:
-                os.replace(settings.MEDIA_ROOT + '/' + old_self.files.name, settings.MEDIA_ROOT + '/' + names)
+                os.renames(settings.MEDIA_ROOT + '/' + old_self.files.name, settings.MEDIA_ROOT + '/' + names)
                 instance.files = names
 
         if old_self.files and old_self.files != instance.files:
@@ -46,10 +58,7 @@ def image_rename(sender, instance, **kwargs):
         names = upload_location_image(instance, old_self.image.url)
         if os.path.isfile(settings.MEDIA_ROOT + '/' + old_self.image.name) and instance.image.closed:
             if settings.MEDIA_ROOT + '/' + old_self.image.name != settings.MEDIA_ROOT + '/' + names:
-                print('hello')
-                print( settings.MEDIA_ROOT + '/' + old_self.image.name)
-                print(settings.MEDIA_ROOT + '/' + names)
-                os.replace(settings.MEDIA_ROOT + '/' + old_self.image.name, settings.MEDIA_ROOT + '/' + names)
+                os.renames(settings.MEDIA_ROOT + '/' + old_self.image.name, settings.MEDIA_ROOT + '/' + names)
                 instance.image = names
 
         if old_self.image and old_self.image != instance.image:
@@ -58,7 +67,6 @@ def image_rename(sender, instance, **kwargs):
 @receiver(post_delete, sender=Image_Storage)
 def image_delete(sender, instance, **kwargs):
     if instance.image:
-       print('delete images')
        instance.image.close()
        instance.image.delete(False)
 

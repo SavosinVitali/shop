@@ -59,6 +59,7 @@ class Brand(models.Model):
     logo = models.ImageField(upload_to=upload_location_image, verbose_name="Изображение Бренда",
                              validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('image/jpeg', 'image/png', 'image/x-ms-bmp'))])
     files = GenericRelation(File_Storage)
+    image = GenericRelation(Image_Storage)
 
 
     class Meta:
