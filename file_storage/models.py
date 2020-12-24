@@ -52,7 +52,10 @@ class File_Storage(models.Model):
 
 class Image_Storage(models.Model):
     image = models.ImageField(upload_to=upload_location_image, blank=True, null=True, verbose_name='Изображение',
-                              validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('image/jpeg', 'image/png', 'image/x-ms-bmp'))])
+                              help_text="Загрузите изображение не мение 1920x1080",
+                              validators=[FileValidator(max_size=1024 * 1024 * 5.1,
+                                                        content_types=('image/jpeg', 'image/png', 'image/x-ms-bmp'),
+                                                        min_resolution =(1920, 1080))])
     title_image = models.CharField(max_length=200, db_index=True, verbose_name="Описание изображения", null=True, blank=False)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name="К чему относится файл")
     resize = models.BooleanField(default=True, verbose_name="Делать миниатюры изображений")
