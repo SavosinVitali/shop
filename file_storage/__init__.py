@@ -1,1 +1,1 @@
-default_app_config = 'file_storage.apps.FileStorageConfig'
+# default_app_config = 'file_storage.apps.FileStorageConfig'

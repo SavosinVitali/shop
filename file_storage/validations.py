@@ -39,23 +39,21 @@ class FileValidator(object):
                                       'old_content_type': self.content_types}
                      raise ValidationError(self.error_messages['content_type'], "content_type", params)
         # проверяем максимальный размер файла
-        if self.max_size is not None and data.size > self.max_size:
+        if self.max_size is not None and data.size > self.max_size and not data.closed:
             params = {
                 'max_size': filesizeformat(self.max_size),
                 'size': filesizeformat(data.size),
             }
             raise ValidationError(self.error_messages['max_size'], 'max_size', params)
         # проверяем минимальный размер файла
-        if self.min_size is not None and data.size < self.min_size:
+        if self.min_size is not None and data.size < self.min_size and not data.closed:
             params = {
                 'min_size': filesizeformat(self.min_size),
                 'size': filesizeformat(data.size)
             }
             raise ValidationError(self.error_messages['min_size'], 'min_size', params)
-        if self.min_resolution is not None and data.width < self.min_resolution[0] and data.height < self.min_resolution[1]:
-            print("self.min_resolution")
-            print(data.width)
-            print(data.height)
+        # проверяем минимальное разрешение файла
+        if data.closed is False and self.min_resolution is not None and data.width < self.min_resolution[0] and data.height < self.min_resolution[1]:
             params = {
                 'min_width': data.width,
                 'min_height': data.height,

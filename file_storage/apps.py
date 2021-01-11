@@ -6,4 +6,4 @@ class FileStorageConfig(AppConfig):
     verbose_name = "Файловое хранилище"
 
     def ready(self):
-        from file_storage import signals
+        import file_storage.signals
