@@ -79,7 +79,7 @@ def file_rename(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=Image_Storage)
 def image_rename(sender, instance, **kwargs):
-    print('pree_save')
+    print('pree_save1')
     if instance.pk is not None:
         old_self = sender.objects.get(pk=instance.pk)
         names = upload_location_image(instance, old_self.image.name)
