@@ -13,7 +13,8 @@ class FileValidator(object):
      'max_size': "Вы привысили максимальный размер файла %(max_size)s, Размер вашего файла %(size)s",
      'min_size': "Минимальный размер загружаемого файла %(min_size)s, Размер вашего файла %(size)s",
      'content_type': "Тип загружаемого файла %(content_type)s. Загрузиет %(old_content_type)s",
-     'min_resolution': "Разрешение загружаемого файла меньше %(min_width)s X %(min_height)s. Загрузиете файл с разрешением %(min_resolutions)s",
+     'min_resolution': "Загрузите изображение разрешением %(min_resolutions_width)s X %(min_resolutions_height)s или более." 
+                       "Разрешение Вашего файла %(min_width)s X %(min_height)s.",
     }
 
     def __init__(self, max_size=None, min_size=None, max_resolution=None, min_resolution=None, content_types=()):
@@ -57,7 +58,8 @@ class FileValidator(object):
             params = {
                 'min_width': data.width,
                 'min_height': data.height,
-                'min_resolutions': self.min_resolution,
+                'min_resolutions_width': self.min_resolution[0],
+                'min_resolutions_height': self.min_resolution[1],
             }
             raise ValidationError(self.error_messages['min_resolution'], 'min_resolution', params)
 

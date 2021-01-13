@@ -1,5 +1,5 @@
 import sys
-from django.db.models.signals import post_delete, pre_save, post_save
+from django.db.models.signals import post_delete, pre_save, post_save, post_init
 from django.dispatch.dispatcher import receiver
 from file_storage.models import upload_location_image, upload_location_file, Image_Storage, File_Storage
 import os
@@ -43,11 +43,19 @@ def folder_del(folder):
         print("Директории '%s' не существует" % folder)
 
 
+# @receiver(post_init, sender=Image_Storage)
+# def post_init_handler(instance, **kwargs):
+#     if instance.pk is not None:
+#         instance.original_image = instance.title_image
+#         print('post_init')
 
 
 """Функция конвертирует делает миниатюры JPEG согласно SIZES_IMAGE в Settings """
 @receiver(post_save, sender=Image_Storage)
 def resize_image(sender, instance, **kwargs):
+    print('post_save')
+    print(instance.title_image)
+    print(instance._old_title_image)
     if instance.pk is not None and instance.image and instance.resize:
         names = image_name_generator(instance.image.name)
         for name in names:
@@ -80,22 +88,15 @@ def file_rename(sender, instance, **kwargs):
 @receiver(pre_save, sender=Image_Storage)
 def image_rename(sender, instance, **kwargs):
     print('pree_save1')
-    if instance.pk is not None:
-        old_self = sender.objects.get(pk=instance.pk)
-        names = upload_location_image(instance, old_self.image.name)
-        instance.image = names
-        if os.path.isfile(settings.MEDIA_ROOT + '/' + old_self.image.name) and instance.image.closed:
-            if old_self.image.name != names:
-                if old_self.resize:
-                    names_old = image_name_generator(old_self.image.name)
-                    names_new = image_name_generator(names)
-                    for name in names_old:
-                        if os.path.isfile(name):
-                            os.renames(name, names_new[names_old.index(name)])
-                else:
-                    os.renames(settings.MEDIA_ROOT + '/' + old_self.image.name, settings.MEDIA_ROOT + '/' + names)
+    print(instance.title_image)
+    print(instance._old_title_image)
+    if instance.pk is not None and instance.title_image != instance._old_title_image:
+        instance.image_renames()
+        instance.image_renames_os()
 
-            """если изменилось имя файла удаляем старые имена и папки"""
+
+
+            # """если изменилось имя файла удаляем старые имена и папки"""
         # if old_self.image and old_self.image != instance.image:
         #     folder = names.rsplit('/', maxsplit=2)
         #     names = image_name_generator(instance.image.name)
@@ -106,13 +107,13 @@ def image_rename(sender, instance, **kwargs):
         #             os.remove(name)
         #     folder_del(settings.MEDIA_ROOT + '/' + folder[0])
 
-        if old_self.resize != instance.resize and not instance.resize:
-            names = image_name_generator(instance.image.name)
-            for name in names:
-                if names.index(name) != 0:
-                    if os.path.isfile(name):
-                        print(name, 'удаляем файл')
-                        os.remove(name)
+        # if old_self.resize != instance.resize and not instance.resize:
+        #     names = image_name_generator(instance.image.name)
+        #     for name in names:
+        #         if names.index(name) != 0:
+        #             if os.path.isfile(name):
+        #                 print(name, 'удаляем файл')
+        #                 os.remove(name)
 
 
 

@@ -67,10 +67,11 @@ def file_storage_resave_files(sender, instance, **kwargs):
 @receiver(post_save, sender=Product)
 @receiver(post_save, sender=Brand)
 def file_storage_resave_image(sender, instance, **kwargs):
+    print('product')
     if instance.pk is not None:
         for name in instance.image.all():
-            name.image.close()
-            name.save()
+            name.image_renames()
+
 
 # @receiver(post_save, sender=Product)
 # def file_storage_resave_product(sender, instance, **kwargs):
