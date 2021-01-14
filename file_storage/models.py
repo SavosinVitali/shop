@@ -1,11 +1,11 @@
 import os
 
 from django.contrib.contenttypes.fields import GenericForeignKey
-
+from PIL import Image
 from pytils.translit import slugify
 from django.db import models
 from django.conf import settings
-from shop.settings import SIZES_IMAGE, RESIZES_IMAGE
+from shop.settings import SIZES_IMAGE, RESIZES_IMAGE, SIZE_DOWNLOAD_IMAGE
 
 
 from django.contrib.contenttypes.models import ContentType
@@ -70,7 +70,7 @@ class Image_Storage(models.Model):
                               help_text="Загрузите изображение не мение 1920x1080",
                               validators=[FileValidator(max_size=1024 * 1024 * 5.1,
                                                         content_types=('image/jpeg', 'image/png', 'image/x-ms-bmp'),
-                                                        min_resolution =(1920, 1080))])
+                                                        min_resolution = SIZE_DOWNLOAD_IMAGE)])
     title_image = models.CharField(max_length=200, db_index=True, verbose_name="Описание изображения", null=True, blank=False)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name="К чему относится файл")
     resize = models.BooleanField(default=True, verbose_name="Делать миниатюры изображений")
@@ -88,6 +88,7 @@ class Image_Storage(models.Model):
         super(Image_Storage, self).__init__(*args, **kwargs)
         self._old_image = self.image
         self._old_title_image = self.title_image
+        self._old_resize = self.resize
 
     def has_changed(self):
         for field in self.__important_fields:
@@ -109,14 +110,47 @@ class Image_Storage(models.Model):
         self.image = upload_location_image(self, self.image.name)
         return self.image
 
-    def image_renames_os(self, resize = False, *args, **kwargs):
-        names_old = image_name_generator(self._old_image.name)
-        names_new = image_name_generator(self.image.name)
-        for name in names_old:
-            if os.path.isfile(name):
-                os.renames(name, names_new[names_old.index(name)])
-        # if os.path.isfile(settings.MEDIA_ROOT + '/' + self._old_image.name):
-        #     os.renames(settings.MEDIA_ROOT + '/' + self._old_image.name, settings.MEDIA_ROOT + '/' + self.image.name)
+
+    def create_resize_image(self, *args, **kwargs):
+            names = image_name_generator(self.image.name)
+            for name in names:
+                try:
+                    im = Image.open(names[0])
+                except OSError as error:
+                    print(error)
+                    print("Файл '%s' не существует" % names[0])
+                else:
+                    if names.index(name) != 0:
+                        if not os.path.isfile(name):
+                            im.thumbnail(SIZES_IMAGE[names.index(name) - 1])
+                            print(name, 'Создана миниатюра')
+                            im.save(name)
+
+
+    def delete_resize_image(self, *args, **kwargs):
+        print('delete')
+        names = image_name_generator(self._old_image.name)
+        for name in names:
+            if names.index(name) != 0:
+                if os.path.isfile(name):
+                    print(name, 'удаляем файл')
+                    os.remove(name)
+
+
+    def image_renames_os(self, *args, **kwargs):
+        if self._old_resize and self.resize:
+            print('1')
+            names_old = image_name_generator(self._old_image.name)
+            names_new = image_name_generator(self.image.name)
+            for name in names_old:
+                if os.path.isfile(name):
+                    os.renames(name, names_new[names_old.index(name)])
+        else:
+            print('2')
+            if os.path.isfile(settings.MEDIA_ROOT + '/' + self._old_image.name):
+                os.renames(settings.MEDIA_ROOT + '/' + self._old_image.name, settings.MEDIA_ROOT + '/' + self.image.name)
+            # if self._old_resize:
+            #     self.delete_resize_image()
 
 
             # old_self = self.objects.get(pk=instance.pk)

@@ -54,22 +54,22 @@ def folder_del(folder):
 @receiver(post_save, sender=Image_Storage)
 def resize_image(sender, instance, **kwargs):
     print('post_save')
-    print(instance.title_image)
-    print(instance._old_title_image)
     if instance.pk is not None and instance.image and instance.resize:
-        names = image_name_generator(instance.image.name)
-        for name in names:
-            try:
-                im = Image.open(names[0])
-            except OSError as error:
-                print(error)
-                print("Файл '%s' не существует" % names[0])
-            else:
-                if names.index(name) != 0:
-                    if not os.path.isfile(name):
-                        im.thumbnail(SIZES_IMAGE[names.index(name)-1])
-                        print(name, 'Создана миниатюра')
-                        im.save(name)
+        instance.create_resize_image()
+
+        # names = image_name_generator(instance.image.name)
+        # for name in names:
+        #     try:
+        #         im = Image.open(names[0])
+        #     except OSError as error:
+        #         print(error)
+        #         print("Файл '%s' не существует" % names[0])
+        #     else:
+        #         if names.index(name) != 0:
+        #             if not os.path.isfile(name):
+        #                 im.thumbnail(SIZES_IMAGE[names.index(name)-1])
+        #                 print(name, 'Создана миниатюра')
+        #                 im.save(name)
 
 @receiver(pre_save, sender=File_Storage)
 def file_rename(sender, instance, **kwargs):
@@ -88,13 +88,11 @@ def file_rename(sender, instance, **kwargs):
 @receiver(pre_save, sender=Image_Storage)
 def image_rename(sender, instance, **kwargs):
     print('pree_save1')
-    print(instance.title_image)
-    print(instance._old_title_image)
     if instance.pk is not None and instance.title_image != instance._old_title_image:
         instance.image_renames()
         instance.image_renames_os()
-
-
+    if instance._old_resize != instance.resize and not instance.resize:
+        instance.delete_resize_image()
 
             # """если изменилось имя файла удаляем старые имена и папки"""
         # if old_self.image and old_self.image != instance.image:
