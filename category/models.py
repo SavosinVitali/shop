@@ -175,6 +175,9 @@ class Product(models.Model):
     files = GenericRelation(File_Storage)
     image = GenericRelation(Image_Storage)
 
+    def __init__(self, *args, **kwargs):
+        super(Product, self).__init__(*args, **kwargs)
+        self._old_name = self.name
 
     class Meta:
         verbose_name = 'Товар'

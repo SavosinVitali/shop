@@ -20,8 +20,10 @@ def upload_location_file(instance, filename):
                                                    slugify(instance.content_object), slugify(instance.file_type), extension)
 
 def upload_location_image(instance, filename):
+    print(filename, 'upload')
     filebase, extension = filename.rsplit('.', maxsplit=1)
     classen = instance.content_object.__class__.__name__
+    # return "file_storage/111.jpg"
     return 'file_storage/%s/%s/images/%s_%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.content_object), slugify(instance.title_image),
                                             slugify(instance.content_object), extension)
 
@@ -90,24 +92,12 @@ class Image_Storage(models.Model):
         self._old_title_image = self.title_image
         self._old_resize = self.resize
 
-    def has_changed(self):
-        for field in self.__important_fields:
-            print('---------change---------------', field)
-            orig = '__original_%s' % field
-            if getattr(self, orig) != getattr(self, field):
-                return True
-        return False
-
-    def save(self,  *args, **kwargs):
-        # Prep the data
-        print('izmenenie')
-        super(Image_Storage, self).save(*args, **kwargs)
-            # If we're down with commitment, save this shit
-
-
 
     def image_renames(self, *args, **kwargs):
+        print(self.image, ' image renames')
+        print(self._old_image, ' old renames')
         self.image = upload_location_image(self, self.image.name)
+        print(self.image, ' image renames')
         return self.image
 
 
@@ -126,9 +116,22 @@ class Image_Storage(models.Model):
                             print(name, 'Создана миниатюра')
                             im.save(name)
 
+    def delete_image(self, *args, **kwargs):
+        if self._old_resize:
+            names = image_name_generator(self._old_image.name)
+            for name in names:
+                if os.path.isfile(name):
+                    print(name, 'удаляем много файлов')
+                    os.remove(name)
+        else:
+            print(settings.MEDIA_ROOT + '/' + self._old_image.name)
+            if os.path.isfile(settings.MEDIA_ROOT + '/' + self._old_image.name):
+                print(settings.MEDIA_ROOT + '/' + self._old_image.name, 'удаляем один файл')
+                os.remove(settings.MEDIA_ROOT + '/' + self._old_image.name)
+
 
     def delete_resize_image(self, *args, **kwargs):
-        print('delete')
+        print('delete miniature')
         names = image_name_generator(self._old_image.name)
         for name in names:
             if names.index(name) != 0:
@@ -136,19 +139,23 @@ class Image_Storage(models.Model):
                     print(name, 'удаляем файл')
                     os.remove(name)
 
-
     def image_renames_os(self, *args, **kwargs):
         if self._old_resize and self.resize:
             print('1')
             names_old = image_name_generator(self._old_image.name)
             names_new = image_name_generator(self.image.name)
+            print(names_old, 'starye faili')
+            print(names_new, 'new faili')
             for name in names_old:
                 if os.path.isfile(name):
                     os.renames(name, names_new[names_old.index(name)])
+                    self._old_image = self.image
+                    print(self._old_image, 'old image')
         else:
             print('2')
             if os.path.isfile(settings.MEDIA_ROOT + '/' + self._old_image.name):
                 os.renames(settings.MEDIA_ROOT + '/' + self._old_image.name, settings.MEDIA_ROOT + '/' + self.image.name)
+                self._old_image = self.image
             # if self._old_resize:
             #     self.delete_resize_image()
 

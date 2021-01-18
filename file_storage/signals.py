@@ -1,5 +1,5 @@
 import sys
-from django.db.models.signals import post_delete, pre_save, post_save, post_init
+from django.db.models.signals import post_delete, pre_save, post_save
 from django.dispatch.dispatcher import receiver
 from file_storage.models import upload_location_image, upload_location_file, Image_Storage, File_Storage
 import os
@@ -88,13 +88,20 @@ def file_rename(sender, instance, **kwargs):
 @receiver(pre_save, sender=Image_Storage)
 def image_rename(sender, instance, **kwargs):
     print('pree_save1')
-    if instance.pk is not None and instance.title_image != instance._old_title_image:
+    print(kwargs)
+    print(instance.title_image)
+    print(instance._old_title_image)
+    if instance.pk is not None and instance.title_image != instance._old_title_image and instance.image.closed\
+        or kwargs['update_fields'] == frozenset({'image'}):
         instance.image_renames()
         instance.image_renames_os()
     if instance._old_resize != instance.resize and not instance.resize:
         instance.delete_resize_image()
+    if instance.image.closed is False and instance._old_image:
+        print('otkrit fail')
+        instance.delete_image()
 
-            # """если изменилось имя файла удаляем старые имена и папки"""
+            # """если изменилось имя файла удаляем старые имена и папкиs"""
         # if old_self.image and old_self.image != instance.image:
         #     folder = names.rsplit('/', maxsplit=2)
         #     names = image_name_generator(instance.image.name)
