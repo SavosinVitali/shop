@@ -59,23 +59,17 @@ from sorl.thumbnail import get_thumbnail
 @receiver(post_save, sender=Product)
 @receiver(post_save, sender=Brand)
 def file_storage_resave_files(sender, instance, **kwargs):
-    if instance.pk is not None:
+    if instance.pk is not None and instance.name != instance._old_name:
         for name in instance.files.all():
-            name.files.close()
-            name.save()
+            name.save(update_fields=['files'])
 
 @receiver(post_save, sender=Product)
 # @receiver(post_save, sender=Brand)
 def file_storage_resave_image(sender, instance, **kwargs):
     if instance.pk is not None and instance.name != instance._old_name:
-        print('product')
         for name in instance.image.all():
-            name._old_title_image='fdsguidhiufguhifhughudfhgui'
-            name.save()
-            print('sohranenie produkta')
-            print(name.image)
-            print(name._old_image)
-            # name.image_renames_os()
+            name.save(update_fields=['image'])
+
 
 # @receiver(post_save, sender=Product)
 # def file_storage_resave_product(sender, instance, **kwargs):

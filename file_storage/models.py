@@ -1,29 +1,28 @@
 import os
-
+import sys
 from django.contrib.contenttypes.fields import GenericForeignKey
 from PIL import Image
 from pytils.translit import slugify
 from django.db import models
 from django.conf import settings
 from shop.settings import SIZES_IMAGE, RESIZES_IMAGE, SIZE_DOWNLOAD_IMAGE
-
-
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.contrib.contenttypes.models import ContentType
-
+import magic
 from file_storage.validations import FileValidator
 
 
 def upload_location_file(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
     classen = instance.content_object.__class__.__name__
-    return 'file_storage/%s/%s/files/%s_%s_%s.%s' % (slugify(instance.content_object.__class__.__name__),  slugify(instance.content_object), slugify(instance.title_files),
-                                                   slugify(instance.content_object), slugify(instance.file_type), extension)
+    return 'file_storage/%s/%s/files/%s_%s_%s.%s' % (slugify(instance.content_object.__class__.__name__),
+                                                     slugify(instance.content_object), slugify(instance.title_files),
+                                                     slugify(instance.content_object),
+                                                     slugify(instance.file_type), extension)
 
 def upload_location_image(instance, filename):
-    print(filename, 'upload')
     filebase, extension = filename.rsplit('.', maxsplit=1)
-    classen = instance.content_object.__class__.__name__
-    # return "file_storage/111.jpg"
     return 'file_storage/%s/%s/images/%s_%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.content_object), slugify(instance.title_image),
                                             slugify(instance.content_object), extension)
 
@@ -64,8 +63,55 @@ class File_Storage(models.Model):
         verbose_name = 'Файл'
         verbose_name_plural = "Файлы"
 
+
     def __str__(self):
         return self.title_files
+
+
+    def __init__(self, *args, **kwargs):
+        super(File_Storage, self).__init__(*args, **kwargs)
+        self._old_files = self.files
+        self._old_title_files = self.title_files
+
+
+    def files_renames(self, *args, **kwargs):
+        self.files = upload_location_file(self, self.files.name)
+        return self.files
+
+
+
+    def files_renames_os(self, *args, **kwargs):
+        if os.path.isfile(settings.MEDIA_ROOT + '/' + self._old_files.name):
+            os.renames(settings.MEDIA_ROOT + '/' + self._old_files.name, settings.MEDIA_ROOT + '/' + self.files.name)
+
+    """Функция удаляет файлы на жестком диске"""
+    def delete_files(self, *args, **kwargs):
+        if os.path.isfile(settings.MEDIA_ROOT + '/' + self._old_files.name):
+            os.remove(settings.MEDIA_ROOT + '/' + self._old_files.name)
+
+
+    def folder_del(self, *args, **kwargs):
+        """ Удаляем папки в которых нет файлов"""
+        folder = self._old_files.name.rsplit('/', maxsplit=2)
+        folder = settings.MEDIA_ROOT + '/' + folder[0]
+        for dir, subdirs, files in os.walk(folder):
+            if subdirs == [] and files == []:
+                try:
+                    os.rmdir(dir)
+                except OSError as error:
+                    print(error)
+                    print("Директория '%s' не может быть удалена" % dir)
+        try:
+            if os.listdir(folder) == []:
+                try:
+                    os.rmdir(folder)
+                except OSError as error:
+                    print(error)
+                    print("Директория '%s' не может быть удалена" % folder)
+        except OSError as error:
+            print(error)
+            print("Директории '%s' не существует" % folder)
+
 
 class Image_Storage(models.Model):
     image = models.ImageField(upload_to=upload_location_image, blank=True, null=True, verbose_name='Изображение',
@@ -94,13 +140,12 @@ class Image_Storage(models.Model):
 
 
     def image_renames(self, *args, **kwargs):
-        print(self.image, ' image renames')
-        print(self._old_image, ' old renames')
         self.image = upload_location_image(self, self.image.name)
-        print(self.image, ' image renames')
         return self.image
 
 
+
+    """Функция создает миниатюры на жестком диске"""
     def create_resize_image(self, *args, **kwargs):
             names = image_name_generator(self.image.name)
             for name in names:
@@ -113,67 +158,91 @@ class Image_Storage(models.Model):
                     if names.index(name) != 0:
                         if not os.path.isfile(name):
                             im.thumbnail(SIZES_IMAGE[names.index(name) - 1])
-                            print(name, 'Создана миниатюра')
                             im.save(name)
 
+    """Функция удаляет файлы на жестком диске"""
     def delete_image(self, *args, **kwargs):
         if self._old_resize:
             names = image_name_generator(self._old_image.name)
             for name in names:
                 if os.path.isfile(name):
-                    print(name, 'удаляем много файлов')
                     os.remove(name)
         else:
-            print(settings.MEDIA_ROOT + '/' + self._old_image.name)
             if os.path.isfile(settings.MEDIA_ROOT + '/' + self._old_image.name):
-                print(settings.MEDIA_ROOT + '/' + self._old_image.name, 'удаляем один файл')
                 os.remove(settings.MEDIA_ROOT + '/' + self._old_image.name)
 
-
+    """Функция удаляет миниатюры на жестком диске"""
     def delete_resize_image(self, *args, **kwargs):
-        print('delete miniature')
         names = image_name_generator(self._old_image.name)
         for name in names:
             if names.index(name) != 0:
                 if os.path.isfile(name):
-                    print(name, 'удаляем файл')
                     os.remove(name)
 
+
+    """Функция переименовывает файлы на жестком диске"""
     def image_renames_os(self, *args, **kwargs):
         if self._old_resize and self.resize:
-            print('1')
-            names_old = image_name_generator(self._old_image.name)
             names_new = image_name_generator(self.image.name)
-            print(names_old, 'starye faili')
-            print(names_new, 'new faili')
+            names_old = image_name_generator(self._old_image.name)
             for name in names_old:
                 if os.path.isfile(name):
                     os.renames(name, names_new[names_old.index(name)])
-                    self._old_image = self.image
-                    print(self._old_image, 'old image')
         else:
-            print('2')
             if os.path.isfile(settings.MEDIA_ROOT + '/' + self._old_image.name):
                 os.renames(settings.MEDIA_ROOT + '/' + self._old_image.name, settings.MEDIA_ROOT + '/' + self.image.name)
-                self._old_image = self.image
-            # if self._old_resize:
-            #     self.delete_resize_image()
 
 
-            # old_self = self.objects.get(pk=instance.pk)
-            # if self.image.name != upload_location_image(self, self.image.name):
-            #     self.image = upload_location_image(self, self.image.name)
-            #     print('save models')
+    """Функция конвертирует загружаемые картинки в JPEG когда в админке выбираем новый файл"""
+    def image_convert_jpeg(self, *args, **kwargs):
+        content_type = magic.from_buffer(self.image.read(1024), mime=True)
+        if content_type == 'image/jpeg':
+            new_img = Image.open(self.image).convert('RGB')
+            new_img.thumbnail(RESIZES_IMAGE, Image.ANTIALIAS)
+            output = BytesIO()
+            new_img.save(output, 'JPEG', quality=80)
+            output.seek(0)
+            self.image = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % self.image.name,
+                                              'image/jpeg', sys.getsizeof(output), None)
 
+        if content_type == 'image/x-ms-bmp':
+            new_img = Image.open(self.image).convert('RGB')
+            new_img.thumbnail(RESIZES_IMAGE, Image.ANTIALIAS)
+            output = BytesIO()
+            new_img.save(output, 'JPEG', quality=80)
+            output.seek(0)
+            self.image = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % self.image.name,
+                                              'image/jpeg', sys.getsizeof(output), None)
 
-            # instance.image = names
-            # if os.path.isfile(settings.MEDIA_ROOT + '/' + old_self.image.name) and instance.image.closed:
-            #     if old_self.image.name != names:
-            #         if old_self.resize:
-            #             names_old = image_name_generator(old_self.image.name)
-            #             names_new = image_name_generator(names)
-            #             for name in names_old:
-            #                 if os.path.isfile(name):
-            #                     os.renames(name, names_new[names_old.index(name)])
-            #         else:
-            #             os.renames(settings.MEDIA_ROOT + '/' + old_self.image.name, settings.MEDIA_ROOT + '/' + names)
+        if content_type == 'image/png':
+            png = Image.open(self.image).convert('RGBA')
+            background = Image.new("RGBA", png.size, (255, 255, 255))
+            alpha_composite = Image.alpha_composite(background, png).convert('RGB')
+            alpha_composite.thumbnail(RESIZES_IMAGE, Image.ANTIALIAS)
+            output = BytesIO()
+            alpha_composite.save(output, 'JPEG', quality=80)
+            output.seek(0)
+            self.image = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % self.image.name,
+                                              'image/jpeg', sys.getsizeof(output), None)
+
+    def folder_del(self, *args, **kwargs):
+        """ Удаляем папки в которых нет файлов"""
+        folder = self._old_image.name.rsplit('/', maxsplit=2)
+        folder = settings.MEDIA_ROOT + '/' + folder[0]
+        for dir, subdirs, files in os.walk(folder):
+            if subdirs == [] and files == []:
+                try:
+                    os.rmdir(dir)
+                except OSError as error:
+                    print(error)
+                    print("Директория '%s' не может быть удалена" % dir)
+        try:
+            if os.listdir(folder) == []:
+                try:
+                    os.rmdir(folder)
+                except OSError as error:
+                    print(error)
+                    print("Директория '%s' не может быть удалена" % folder)
+        except OSError as error:
+            print(error)
+            print("Директории '%s' не существует" % folder)

@@ -1,96 +1,49 @@
-import sys
-from django.db.models.signals import post_delete, pre_save, post_save
+from django.db.models.signals import post_delete, pre_save, post_save, pre_delete
 from django.dispatch.dispatcher import receiver
-from file_storage.models import upload_location_image, upload_location_file, Image_Storage, File_Storage
-import os
-from django.conf import settings
-from PIL import Image
-from io import BytesIO
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from shop.settings import SIZES_IMAGE, RESIZES_IMAGE
-import magic
+from file_storage.models import  Image_Storage, File_Storage
 
 
-def image_name_generator(logo):
-    """Функция генерирует имена файлов исходя из разрешений изображения"""
-    name = []
-    filebase, extension = logo.rsplit('.', maxsplit=1)
-    name.append(settings.MEDIA_ROOT + '/' + logo)
-    for size in SIZES_IMAGE:
-        name.append(settings.MEDIA_ROOT + '/%s_%s.%s' % (filebase, size[0], extension))
-    return name
-
-def folder_del(folder):
-    """ Удаляем папки в которых нет файлов"""
-    for dir, subdirs, files in os.walk(folder):
-        if subdirs == [] and files == []:
-            try:
-                os.rmdir(dir)
-                print("Директория '%s' успешно удалена" % dir)
-            except OSError as error:
-                print(error)
-                print("Директория '%s' не может быть удалена" % dir)
-    try:
-        if os.listdir(folder) == []:
-            try:
-                os.rmdir(folder)
-                print("Директория '%s' успешно удалена" % folder)
-            except OSError as error:
-                print(error)
-                print("Директория '%s' не может быть удалена" % folder)
-    except OSError as error:
-        print(error)
-        print("Директории '%s' не существует" % folder)
-
-
-# @receiver(post_init, sender=Image_Storage)
-# def post_init_handler(instance, **kwargs):
-#     if instance.pk is not None:
-#         instance.original_image = instance.title_image
-#         print('post_init')
-
-
-"""Функция конвертирует делает миниатюры JPEG согласно SIZES_IMAGE в Settings """
-@receiver(post_save, sender=Image_Storage)
-def resize_image(sender, instance, **kwargs):
-    print('post_save')
-    if instance.pk is not None and instance.image and instance.resize:
-        instance.create_resize_image()
-
-        # names = image_name_generator(instance.image.name)
-        # for name in names:
-        #     try:
-        #         im = Image.open(names[0])
-        #     except OSError as error:
-        #         print(error)
-        #         print("Файл '%s' не существует" % names[0])
-        #     else:
-        #         if names.index(name) != 0:
-        #             if not os.path.isfile(name):
-        #                 im.thumbnail(SIZES_IMAGE[names.index(name)-1])
-        #                 print(name, 'Создана миниатюра')
-        #                 im.save(name)
 
 @receiver(pre_save, sender=File_Storage)
 def file_rename(sender, instance, **kwargs):
     if instance.pk is not None:
-        old_self = sender.objects.get(pk=instance.pk)
-        names = upload_location_file(instance, old_self.files.url)
-        if os.path.isfile(settings.MEDIA_ROOT + '/' + old_self.files.name) and instance.files.closed:
-            if settings.MEDIA_ROOT + '/' + old_self.files.name != settings.MEDIA_ROOT + '/' + names:
-                os.renames(settings.MEDIA_ROOT + '/' + old_self.files.name, settings.MEDIA_ROOT + '/' + names)
-                instance.files = names
+        obj = sender.objects.get(pk=instance.pk)
+        instance._old_files= obj.files
+        instance._old_title_files = obj.title_files
+        # names = upload_location_file(instance, old_self.files.url)
+        if instance.pk is not None and instance.title_files != instance._old_title_files and instance.files.closed \
+                or kwargs['update_fields'] == frozenset({'files'}):
+            instance.files_renames()
+            instance.files_renames_os()
 
-        if old_self.files and old_self.files != instance.files:
-            old_self.files.close()
-            old_self.files.delete(False)
+        if instance.files and instance._old_files != instance.files:
+            instance._old_files.close()
+            instance._old_files.delete(False)
+
+
+@receiver(pre_delete, sender=File_Storage)
+def image_delete3(sender, instance, **kwargs):
+    if instance.files:
+        obj = sender.objects.get(pk=instance.pk)
+        instance._old_files = obj.files
+        instance._old_title_files = obj.title_files
+
+
+@receiver(post_delete, sender=File_Storage)
+def file_delete4(sender, instance, **kwargs):
+    if instance.files:
+       instance.delete_files()
+       instance.folder_del()
 
 @receiver(pre_save, sender=Image_Storage)
 def image_rename(sender, instance, **kwargs):
-    print('pree_save1')
-    print(kwargs)
-    print(instance.title_image)
-    print(instance._old_title_image)
+    if instance.pk is not None:
+        obj = sender.objects.get(pk=instance.pk)
+        instance._old_image = obj.image
+        instance._old_resize = obj.resize
+        instance._old_title_image = obj.title_image
+    if instance.image.closed is False:
+        instance.image_convert_jpeg()
     if instance.pk is not None and instance.title_image != instance._old_title_image and instance.image.closed\
         or kwargs['update_fields'] == frozenset({'image'}):
         instance.image_renames()
@@ -98,85 +51,26 @@ def image_rename(sender, instance, **kwargs):
     if instance._old_resize != instance.resize and not instance.resize:
         instance.delete_resize_image()
     if instance.image.closed is False and instance._old_image:
-        print('otkrit fail')
         instance.delete_image()
 
-            # """если изменилось имя файла удаляем старые имена и папкиs"""
-        # if old_self.image and old_self.image != instance.image:
-        #     folder = names.rsplit('/', maxsplit=2)
-        #     names = image_name_generator(instance.image.name)
-        #     """ Удаляем файлы """
-        #     for name in names:
-        #         if os.path.isfile(name):
-        #             print(name, 'удаляем файл')
-        #             os.remove(name)
-        #     folder_del(settings.MEDIA_ROOT + '/' + folder[0])
-
-        # if old_self.resize != instance.resize and not instance.resize:
-        #     names = image_name_generator(instance.image.name)
-        #     for name in names:
-        #         if names.index(name) != 0:
-        #             if os.path.isfile(name):
-        #                 print(name, 'удаляем файл')
-        #                 os.remove(name)
+"""Функция  делает миниатюры согласно SIZES_IMAGE в Settings """
+@receiver(post_save, sender=Image_Storage)
+def resize_image(sender, instance, **kwargs):
+    if instance.pk is not None and instance.image and instance.resize:
+        instance.create_resize_image()
 
 
-
-"""Функция конвертирует загружаемые картинки в JPEG когда в админке выбираем новый файл"""
-@receiver(pre_save, sender=Image_Storage)
-def image_convert_jpeg(sender, instance, **kwargs):
-    if instance.image.closed is False:
-        content_type = magic.from_buffer(instance.image.read(1024), mime=True)
-        if content_type == 'image/jpeg':
-            new_img = Image.open(instance.image).convert('RGB')
-            new_img.thumbnail(RESIZES_IMAGE, Image.ANTIALIAS)
-            output = BytesIO()
-            new_img.save(output, 'JPEG', quality=80)
-            output.seek(0)
-            instance.image = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % instance.image.name, 'image/jpeg',
-                                              sys.getsizeof(output), None)
-
-
-        if content_type == 'image/x-ms-bmp':
-            new_img = Image.open(instance.image).convert('RGB')
-            new_img.thumbnail(RESIZES_IMAGE, Image.ANTIALIAS)
-            output = BytesIO()
-            new_img.save(output, 'JPEG', quality=80)
-            output.seek(0)
-            instance.image = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % instance.image.name, 'image/jpeg',
-                                              sys.getsizeof(output), None)
-
-
-        if content_type == 'image/png':
-            png = Image.open(instance.image).convert('RGBA')
-            background = Image.new("RGBA", png.size, (255, 255, 255))
-            alpha_composite = Image.alpha_composite(background, png).convert('RGB')
-            alpha_composite.thumbnail(RESIZES_IMAGE, Image.ANTIALIAS)
-            output = BytesIO()
-            alpha_composite.save(output, 'JPEG', quality=80)
-            output.seek(0)
-            instance.image = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % instance.image.name, 'image/jpeg',
-                                              sys.getsizeof(output), None)
-
-
+@receiver(pre_delete, sender=Image_Storage)
+def image_delete1(sender, instance, **kwargs):
+    if instance.image:
+        obj = sender.objects.get(pk=instance.pk)
+        instance._old_image = obj.image
+        instance._old_resize = obj.resize
+        instance._old_title_image = obj.title_image
 
 @receiver(post_delete, sender=Image_Storage)
-def image_delete(sender, instance, **kwargs):
-    if instance.image:
-        names = image_name_generator(instance.image.name)
-        folder = names[0].rsplit('/', maxsplit=2)
-        for name in names:
-            if os.path.isfile(name):
-               os.remove(name)
-        folder_del(folder[0])
-       # instance.image.close()
-       # instance.image.delete(False)
+def image_delete2(sender, instance, **kwargs):
+    instance.delete_image()
+    instance.folder_del()
 
-@receiver(post_delete, sender=File_Storage)
-def file_delete(sender, instance, **kwargs):
-    if instance.files:
-       folder = instance.files.name.rsplit('/', maxsplit=2)
 
-       if os.path.isfile(settings.MEDIA_ROOT + '/' + instance.files.name):
-           os.remove(settings.MEDIA_ROOT + '/' + instance.files.name)
-       folder_del(settings.MEDIA_ROOT + '/' + folder[0])
