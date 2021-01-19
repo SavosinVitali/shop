@@ -173,7 +173,7 @@ class CategoryAdmin(AdminImageMixin, DraggableMPTTAdmin):
 @admin.register(Product) # регистрируем в админке приложение category
 class ProductAdmin(AdminImageMixin, admin.ModelAdmin):
     list_display = ('name', 'type_product', 'category' , 'slug' , 'slug_home', 'stock', 'available', 'created', 'get_image', ) # задаем какие поля в админке будут отображаться
-    fields = ('category','type_product', ('name','available') , ('slug', 'slug_home'), ('stock','price'), ('created', 'updated'), )
+    fields = (('category', 'brand'), 'type_product', ('name','available') , ('slug', 'slug_home'), ('stock','price'), ('created', 'updated'), )
     prepopulated_fields = {'slug': ('name',)}# поле slug заполняется из поля name
     raw_id_fields = ('category' ,) # добавляет поиск при создании данного поля
     list_editable = ('available','stock')

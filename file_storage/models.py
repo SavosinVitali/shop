@@ -17,14 +17,21 @@ def upload_location_file(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
     classen = instance.content_object.__class__.__name__
     return 'file_storage/%s/%s/files/%s_%s_%s.%s' % (slugify(instance.content_object.__class__.__name__),
-                                                     slugify(instance.content_object), slugify(instance.title_files),
                                                      slugify(instance.content_object),
-                                                     slugify(instance.file_type), extension)
+                                                     slugify(instance.title_files),
+                                                     slugify(instance.content_object),
+                                                     slugify(instance.file_type),
+                                                     extension)
 
 def upload_location_image(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
-    return 'file_storage/%s/%s/images/%s_%s.%s' % (slugify(instance.content_object.__class__.__name__), slugify(instance.content_object), slugify(instance.title_image),
-                                            slugify(instance.content_object), extension)
+    print(instance.content_object)
+    print(instance.content_object.category)
+    return 'file_storage/%s/%s/images/%s_%s.%s' % (slugify(instance.content_object.__class__.__name__),
+                                                   slugify(instance.content_object),
+                                                   slugify(instance.title_image),
+                                                   slugify(instance.content_object),
+                                                   extension)
 
 def image_name_generator(logo):
     """Функция генерирует имена файлов исходя из разрешений изображения"""
@@ -89,9 +96,8 @@ class File_Storage(models.Model):
         if os.path.isfile(settings.MEDIA_ROOT + '/' + self._old_files.name):
             os.remove(settings.MEDIA_ROOT + '/' + self._old_files.name)
 
-
+    """ Удаляем папки в которых нет файлов"""
     def folder_del(self, *args, **kwargs):
-        """ Удаляем папки в которых нет файлов"""
         folder = self._old_files.name.rsplit('/', maxsplit=2)
         folder = settings.MEDIA_ROOT + '/' + folder[0]
         for dir, subdirs, files in os.walk(folder):
