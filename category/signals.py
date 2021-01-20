@@ -69,6 +69,7 @@ def file_storage_resave_image(sender, instance, **kwargs):
     if instance.pk is not None and instance.name != instance._old_name:
         for name in instance.image.all():
             name.save(update_fields=['image'])
+            print('Sohranenie produkta')
 
 
 # @receiver(post_save, sender=Product)

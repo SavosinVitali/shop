@@ -37,21 +37,21 @@ def file_delete4(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=Image_Storage)
 def image_rename(sender, instance, **kwargs):
-    if instance.pk is not None:
-        obj = sender.objects.get(pk=instance.pk)
-        instance._old_image = obj.image
-        instance._old_resize = obj.resize
-        instance._old_title_image = obj.title_image
     if instance.image.closed is False:
         instance.image_convert_jpeg()
-    if instance.pk is not None and instance.title_image != instance._old_title_image and instance.image.closed\
-        or kwargs['update_fields'] == frozenset({'image'}):
+        instance.alt_image_generator()
+        instance.alt_title_generator()
+    if instance.pk is not None and instance.image.closed and kwargs['update_fields'] == frozenset({'image'}):
         instance.image_renames()
         instance.image_renames_os()
     if instance._old_resize != instance.resize and not instance.resize:
+        instance.image_renames()
         instance.delete_resize_image()
+    if instance._old_resize != instance.resize and instance.resize:
+        instance.image_renames()
     if instance.image.closed is False and instance._old_image:
         instance.delete_image()
+
 
 """Функция  делает миниатюры согласно SIZES_IMAGE в Settings """
 @receiver(post_save, sender=Image_Storage)

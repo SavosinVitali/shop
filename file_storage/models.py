@@ -27,9 +27,9 @@ def upload_location_image(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
     print(instance.content_object)
     print(instance.content_object.category)
-    return 'file_storage/%s/%s/images/%s_%s.%s' % (slugify(instance.content_object.__class__.__name__),
+    # print(instance.content_object.brand__country)
+    return 'file_storage/%s/%s/images/%s.%s' % (slugify(instance.content_object.__class__.__name__),
                                                    slugify(instance.content_object),
-                                                   slugify(instance.title_image),
                                                    slugify(instance.content_object),
                                                    extension)
 
@@ -120,12 +120,13 @@ class File_Storage(models.Model):
 
 
 class Image_Storage(models.Model):
-    image = models.ImageField(upload_to=upload_location_image, blank=True, null=True, verbose_name='Изображение',
+    image = models.ImageField(upload_to=upload_location_image, blank=False, null=False, verbose_name='Изображение',
                               help_text="Загрузите изображение не мение 1920x1080",
                               validators=[FileValidator(max_size=1024 * 1024 * 5.1,
                                                         content_types=('image/jpeg', 'image/png', 'image/x-ms-bmp'),
                                                         min_resolution = SIZE_DOWNLOAD_IMAGE)])
-    title_image = models.CharField(max_length=200, db_index=True, verbose_name="Описание изображения", null=True, blank=False)
+    title_image = models.CharField(max_length=200,  verbose_name="Описание изображения (Title)", blank=True)
+    alt_image = models.CharField(max_length=200,  verbose_name="Описание изображения (Alt)", blank=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name="К чему относится файл")
     resize = models.BooleanField(default=True, verbose_name="Делать миниатюры изображений")
     object_id = models.PositiveIntegerField()
@@ -149,7 +150,13 @@ class Image_Storage(models.Model):
         self.image = upload_location_image(self, self.image.name)
         return self.image
 
+    def alt_image_generator(self, *args, **kwargs):
+        self.alt_image = '%s' % (self.content_object)
+        return self.alt_image
 
+    def alt_title_generator(self, *args, **kwargs):
+        self.title_image = '%s фирмы %s' % (self.content_object, self.content_object.brand)
+        return self.title_image
 
     """Функция создает миниатюры на жестком диске"""
     def create_resize_image(self, *args, **kwargs):
@@ -179,7 +186,8 @@ class Image_Storage(models.Model):
 
     """Функция удаляет миниатюры на жестком диске"""
     def delete_resize_image(self, *args, **kwargs):
-        names = image_name_generator(self._old_image.name)
+        names = image_name_generator(self.image.name)
+        print(names)
         for name in names:
             if names.index(name) != 0:
                 if os.path.isfile(name):

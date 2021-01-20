@@ -22,7 +22,7 @@ class File_StorageInline(GenericTabularInline):  #  Добавляем прод�
 class Image_StorageInline(GenericTabularInline):  #  Добавляем продукты к категориям в админке
     model = Image_Storage
     extra = 0
-    fields = ('image', 'title_image', 'resize', 'get_image',)
+    fields = ('image', 'title_image', 'alt_image', 'resize', 'get_image',)
     readonly_fields = ('get_image',)
     view_on_site = False  # Ссылка смотреть на сайте get_absolute_url
     # can_delete = False  # можно ли удалять со страницы категорий товары
