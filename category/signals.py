@@ -64,13 +64,22 @@ def file_storage_resave_files(sender, instance, **kwargs):
             name.save(update_fields=['files'])
 
 @receiver(post_save, sender=Product)
-# @receiver(post_save, sender=Brand)
 def file_storage_resave_image(sender, instance, **kwargs):
+    print(instance.name, instance._old_name, 'Dannie produkta')
     if instance.pk is not None and instance.name != instance._old_name:
         for name in instance.image.all():
-            name.save(update_fields=['image'])
+            name.save(update_fields=['image', 'alt_image', 'title_image'])
             print('Sohranenie produkta')
 
+@receiver(post_save, sender=Brand)
+def file_storage_resave_image2(sender, instance, **kwargs):
+    if instance.pk is not None:
+        if instance.name != instance._old_name or instance._old_country != instance.country:
+            for product in Product.objects.filter(brand_id=instance.pk):
+                for name in product.image.all():
+                    name.save(update_fields=['image', 'alt_image', 'title_image'])
+                    print('Sohranenie produkta')
+            print('brend izmenilsa')
 
 # @receiver(post_save, sender=Product)
 # def file_storage_resave_product(sender, instance, **kwargs):

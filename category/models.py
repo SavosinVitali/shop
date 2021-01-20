@@ -69,6 +69,11 @@ class Brand(models.Model):
     def __str__(self):
         return self.name
 
+    def __init__(self, *args, **kwargs):
+        super(Brand, self).__init__(*args, **kwargs)
+        self._old_name = self.name
+        self._old_country = self.country
+
 
 class StatusManager(models.Manager):
     def get_queryset(self):

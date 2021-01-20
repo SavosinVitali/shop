@@ -25,9 +25,6 @@ def upload_location_file(instance, filename):
 
 def upload_location_image(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
-    print(instance.content_object)
-    print(instance.content_object.category)
-    # print(instance.content_object.brand__country)
     return 'file_storage/%s/%s/images/%s.%s' % (slugify(instance.content_object.__class__.__name__),
                                                    slugify(instance.content_object),
                                                    slugify(instance.content_object),
@@ -154,24 +151,27 @@ class Image_Storage(models.Model):
         self.alt_image = '%s' % (self.content_object)
         return self.alt_image
 
-    def alt_title_generator(self, *args, **kwargs):
-        self.title_image = '%s фирмы %s' % (self.content_object, self.content_object.brand)
+    def title_image_generator(self, *args, **kwargs):
+        self.title_image = '%s. Фирма: %s Cтрана производства: %s' % (self.content_object,
+                                                                   self.content_object.brand,
+                                                                   self.content_object.brand.country.name)
         return self.title_image
 
     """Функция создает миниатюры на жестком диске"""
     def create_resize_image(self, *args, **kwargs):
-            names = image_name_generator(self.image.name)
-            for name in names:
-                try:
-                    im = Image.open(names[0])
-                except OSError as error:
-                    print(error)
-                    print("Файл '%s' не существует" % names[0])
-                else:
-                    if names.index(name) != 0:
-                        if not os.path.isfile(name):
-                            im.thumbnail(SIZES_IMAGE[names.index(name) - 1])
-                            im.save(name)
+        print('create resize image')
+        names = image_name_generator(self.image.name)
+        for name in names:
+            try:
+                im = Image.open(names[0])
+            except OSError as error:
+                print(error)
+                print("Файл '%s' не существует" % names[0])
+            else:
+                if names.index(name) != 0:
+                    if not os.path.isfile(name):
+                        im.thumbnail(SIZES_IMAGE[names.index(name) - 1])
+                        im.save(name)
 
     """Функция удаляет файлы на жестком диске"""
     def delete_image(self, *args, **kwargs):
@@ -187,7 +187,7 @@ class Image_Storage(models.Model):
     """Функция удаляет миниатюры на жестком диске"""
     def delete_resize_image(self, *args, **kwargs):
         names = image_name_generator(self.image.name)
-        print(names)
+        print(names, 'delete resize image')
         for name in names:
             if names.index(name) != 0:
                 if os.path.isfile(name):
