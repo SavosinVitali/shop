@@ -124,6 +124,9 @@ class Image_Storage(models.Model):
                                                         min_resolution = SIZE_DOWNLOAD_IMAGE)])
     title_image = models.CharField(max_length=200,  verbose_name="Описание изображения (Title)", blank=True)
     alt_image = models.CharField(max_length=200,  verbose_name="Описание изображения (Alt)", blank=True)
+    display_order = models.PositiveIntegerField(default=0, db_index=True,
+                    help_text="An image with a display order of zero will be the primary"
+                    " image for a product")
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name="К чему относится файл")
     resize = models.BooleanField(default=True, verbose_name="Делать миниатюры изображений")
     object_id = models.PositiveIntegerField()
@@ -141,6 +144,22 @@ class Image_Storage(models.Model):
         self._old_image = self.image
         self._old_title_image = self.title_image
         self._old_resize = self.resize
+
+    def is_primary(self):
+        """
+        Return bool if image display order is 0
+        """
+        return self.display_order == 0
+
+    def delete(self, *args, **kwargs):
+        """
+        Always keep the display_order as consecutive integers. This avoids
+        issue #855.
+        """
+        super().delete(*args, **kwargs)
+        # for idx, image in enumerate(self.product.images.all()):
+        #     image.display_order = idx
+        #     image.save()
 
 
     def image_renames(self, *args, **kwargs):

@@ -169,7 +169,7 @@ class Product(models.Model):
     brand = models.ForeignKey('Brand', on_delete=models.SET_NULL, verbose_name='Брэнд', null=True)
     name = models.CharField(max_length=200, unique=True, db_index=True, verbose_name="Название")
     slug_home = models.SlugField(default='Null', max_length=200, db_index=True)
-    slug = models.SlugField( max_length=200, unique = True, default="")
+    slug = models.SlugField(max_length=200, unique=True, default="")
     #image = models.ImageField(upload_to='product', blank=True, verbose_name="Изображение товара")
     description = models.TextField(blank=True, verbose_name="Описание")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена")
