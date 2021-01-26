@@ -25,7 +25,7 @@ class Image_StorageInline(GenericTabularInline):  #  Добавляем прод
     # form = Image_StorageAdminForm
     extra = 0
     fields = ('image', 'title_image', 'image_order', 'alt_image', 'resize', 'get_image',)
-    readonly_fields = ('get_image',)
+    readonly_fields = ('get_image', 'image_order', 'alt_image', 'title_image')
     view_on_site = False  # Ссылка смотреть на сайте get_absolute_url
     # can_delete = False  # можно ли удалять со страницы категорий товары
     # show_change_link = True  # ссылка на страницу редактирования товара
@@ -33,6 +33,10 @@ class Image_StorageInline(GenericTabularInline):  #  Добавляем прод
     # original = False
     # # ct_fk_field = "object_id"
     # # ct_field = "content_type"
+    def get_ordering(self, request):
+            return ['image_order']
+
+
     def get_image(self, obj):
         if obj.image:
             return mark_safe(f'<img src = {obj.image.url} width ="50" height ="50"')

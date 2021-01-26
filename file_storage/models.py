@@ -26,7 +26,6 @@ def upload_location_file(instance, filename):
 
 def upload_location_image(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
-    print(instance.get_image_order_display())
     if instance._old_image:
         return 'file_storage/%s/%s/images/%s-%s.%s' % (slugify(instance.content_object.__class__.__name__),
                                                     slugify(instance.content_object),
@@ -34,12 +33,19 @@ def upload_location_image(instance, filename):
                                                     slugify(instance.get_image_order_display()),
                                                     extension)
     else:
-        newstr=instance.Image_Order
-        for image in instance.content_object.image.all():
-            print('----------------------------', image.image_order )
-            print(newstr.count(image.image_order))
-        print( newstr, type( newstr))
-
+        product_all_image = instance.content_object.image.all()
+        image_all_order = []
+        for image in product_all_image:
+            image_all_order.append(image.image_order)
+        for i in range(len(instance.Image_Order)):
+            if not image_all_order.count(instance.Image_Order[i][0]):
+                print('------chislo------', instance.Image_Order[i][0])
+                instance.image_order = instance.Image_Order[i][0]
+                return 'file_storage/%s/%s/images/%s-%s.%s' % (slugify(instance.content_object.__class__.__name__),
+                                                       slugify(instance.content_object),
+                                                       slugify(instance.content_object),
+                                                       slugify(instance.get_image_order_display()),
+                                                       extension)
         # for num in instance.Image_Order:
         #     for image in all_image:
         #         print(num[0], image.image_order)
@@ -140,11 +146,11 @@ class File_Storage(models.Model):
 
 class Image_Storage(models.Model):
     Image_Order = (
-        ('1', 'Вид №1'),
-        ('2', 'Вид №2'),
-        ('3', 'Вид №3'),
-        ('4', 'Вид №4'),
-        ('5', 'Вид №5'),
+        (1, 'Вид №1'),
+        (2, 'Вид №2'),
+        (3, 'Вид №3'),
+        (4, 'Вид №4'),
+        (5, 'Вид №5'),
     )
     image = models.ImageField(upload_to=upload_location_image, blank=False, null=False, verbose_name='Изображение',
                               help_text="Загрузите изображение не мение 1920x1080",
@@ -153,7 +159,7 @@ class Image_Storage(models.Model):
                                                         min_resolution = SIZE_DOWNLOAD_IMAGE)])
     title_image = models.CharField(max_length=200, verbose_name="Описание изображения (Title)", blank=True)
     alt_image = models.CharField(max_length=200, verbose_name="Описание изображения (Alt)", blank=True)
-    image_order = models.CharField(default='1', max_length=200, choices=Image_Order, verbose_name="Вид изображения",
+    image_order = models.PositiveSmallIntegerField(default='1', choices=Image_Order, verbose_name="Вид изображения",
                                    help_text='Выберете вид изображения')
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name="К чему относится файл")
     resize = models.BooleanField(default=True, verbose_name="Делать миниатюры изображений")
@@ -163,7 +169,7 @@ class Image_Storage(models.Model):
     class Meta:
         verbose_name = 'Изображение'
         verbose_name_plural = 'Изображения'
-        unique_together = [['object_id', 'image_order']]
+        # unique_together = [['object_id', 'image_order']]
 
 
     def __str__(self):

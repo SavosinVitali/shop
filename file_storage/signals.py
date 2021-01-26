@@ -41,10 +41,12 @@ def image_rename(sender, instance, **kwargs):
     instance.title_image_generator()
     print(instance.title_image_generator())
     print(kwargs)
+    print(instance._old_resize, 'old resize')
     """Если создали файл"""
     if instance.image.closed is False:
         print(1)
         instance.image_convert_jpeg()
+        return
     """Если произошло изменение названия продукта или брэнда"""
     if instance.pk is not None and instance.image.closed or kwargs['update_fields']:
         print(2)
@@ -53,6 +55,7 @@ def image_rename(sender, instance, **kwargs):
     """Если произошло изменение делать миниатюры, удаляет файлы миниатюр"""
     if instance._old_resize != instance.resize and not instance.resize:
         print(3)
+        print(instance._old_image)
         instance.image_renames()
         instance.delete_resize_image()
     """Если произошло изменение делать миниатюры, создает файлы миниатюр"""
