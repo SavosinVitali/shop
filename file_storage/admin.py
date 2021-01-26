@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 from file_storage.models import File_Storage, File_Type, Image_Storage
 from django.utils.html import mark_safe
+# from file_storage.forms import Image_StorageAdminForm
 
 admin.site.site_title = "Файловое хранилище"
 admin.site.site_header = "Файловое хранилище"
@@ -21,13 +22,14 @@ class File_StorageInline(GenericTabularInline):  #  Добавляем прод�
 
 class Image_StorageInline(GenericTabularInline):  #  Добавляем продукты к категориям в админке
     model = Image_Storage
+    # form = Image_StorageAdminForm
     extra = 0
-    fields = ('image', 'title_image', 'alt_image', 'resize', 'get_image',)
+    fields = ('image', 'title_image', 'image_order', 'alt_image', 'resize', 'get_image',)
     readonly_fields = ('get_image',)
     view_on_site = False  # Ссылка смотреть на сайте get_absolute_url
     # can_delete = False  # можно ли удалять со страницы категорий товары
     # show_change_link = True  # ссылка на страницу редактирования товара
-    max_num = 4
+    max_num = 5
     # original = False
     # # ct_fk_field = "object_id"
     # # ct_field = "content_type"
@@ -46,8 +48,10 @@ class File_Storage(admin.ModelAdmin):
 
 @admin.register(Image_Storage) # регистрируем в админке приложение category
 class Image_Storage(admin.ModelAdmin):
-    fields = ('image', 'title_image', 'content_type', 'object_id', 'content_object', 'resize', 'get_image',)
-    readonly_fields = ('image', 'title_image', 'content_type', 'object_id', 'content_object', 'get_image',)
+    # form = Image_StorageAdminForm
+    fields = ('image', 'title_image', 'image_order', 'content_type', 'object_id', 'content_object', 'resize', 'get_image',)
+    readonly_fields = ('content_type', 'object_id', 'content_object', 'get_image',)
+
 
     def get_image(self, obj):
         if obj.image:

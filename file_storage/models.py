@@ -2,6 +2,7 @@ import os
 import sys
 from django.contrib.contenttypes.fields import GenericForeignKey
 from PIL import Image
+from django.core.exceptions import ValidationError
 from pytils.translit import slugify
 from django.db import models
 from django.conf import settings
@@ -25,10 +26,31 @@ def upload_location_file(instance, filename):
 
 def upload_location_image(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
-    return 'file_storage/%s/%s/images/%s.%s' % (slugify(instance.content_object.__class__.__name__),
-                                                   slugify(instance.content_object),
-                                                   slugify(instance.content_object),
-                                                   extension)
+    print(instance.get_image_order_display())
+    if instance._old_image:
+        return 'file_storage/%s/%s/images/%s-%s.%s' % (slugify(instance.content_object.__class__.__name__),
+                                                    slugify(instance.content_object),
+                                                    slugify(instance.content_object),
+                                                    slugify(instance.get_image_order_display()),
+                                                    extension)
+    else:
+        newstr=instance.Image_Order
+        for image in instance.content_object.image.all():
+            print('----------------------------', image.image_order )
+            print(newstr.count(image.image_order))
+        print( newstr, type( newstr))
+
+        # for num in instance.Image_Order:
+        #     for image in all_image:
+        #         print(num[0], image.image_order)
+        #         if num[0] == image.image_order:
+        #             break
+        #         else:
+        #             print('ваше число', num[0])
+        #     if image.image_order != idx:
+        #         instance.image_order = idx
+        # #     image.display_order = idx
+        # #     image.save()
 
 def image_name_generator(logo):
     """Функция генерирует имена файлов исходя из разрешений изображения"""
@@ -117,16 +139,22 @@ class File_Storage(models.Model):
 
 
 class Image_Storage(models.Model):
+    Image_Order = (
+        ('1', 'Вид №1'),
+        ('2', 'Вид №2'),
+        ('3', 'Вид №3'),
+        ('4', 'Вид №4'),
+        ('5', 'Вид №5'),
+    )
     image = models.ImageField(upload_to=upload_location_image, blank=False, null=False, verbose_name='Изображение',
                               help_text="Загрузите изображение не мение 1920x1080",
                               validators=[FileValidator(max_size=1024 * 1024 * 5.1,
                                                         content_types=('image/jpeg', 'image/png', 'image/x-ms-bmp'),
                                                         min_resolution = SIZE_DOWNLOAD_IMAGE)])
-    title_image = models.CharField(max_length=200,  verbose_name="Описание изображения (Title)", blank=True)
-    alt_image = models.CharField(max_length=200,  verbose_name="Описание изображения (Alt)", blank=True)
-    display_order = models.PositiveIntegerField(default=0, db_index=True,
-                    help_text="An image with a display order of zero will be the primary"
-                    " image for a product")
+    title_image = models.CharField(max_length=200, verbose_name="Описание изображения (Title)", blank=True)
+    alt_image = models.CharField(max_length=200, verbose_name="Описание изображения (Alt)", blank=True)
+    image_order = models.CharField(default='1', max_length=200, choices=Image_Order, verbose_name="Вид изображения",
+                                   help_text='Выберете вид изображения')
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name="К чему относится файл")
     resize = models.BooleanField(default=True, verbose_name="Делать миниатюры изображений")
     object_id = models.PositiveIntegerField()
@@ -135,9 +163,11 @@ class Image_Storage(models.Model):
     class Meta:
         verbose_name = 'Изображение'
         verbose_name_plural = 'Изображения'
+        unique_together = [['object_id', 'image_order']]
+
 
     def __str__(self):
-        return self.title_image
+        return self.alt_image
 
     def __init__(self, *args, **kwargs):
         super(Image_Storage, self).__init__(*args, **kwargs)
