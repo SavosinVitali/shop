@@ -6,6 +6,7 @@ from file_storage.models import  Image_Storage, File_Storage
 
 @receiver(pre_save, sender=File_Storage)
 def file_rename(sender, instance, **kwargs):
+    instance.title_files_generator()
     if instance.pk is not None:
         obj = sender.objects.get(pk=instance.pk)
         instance._old_files= obj.files
@@ -39,13 +40,17 @@ def file_delete4(sender, instance, **kwargs):
 def image_rename(sender, instance, **kwargs):
     instance.alt_image_generator()
     instance.title_image_generator()
-    print(instance.title_image_generator())
-    print(kwargs)
-    print(instance._old_resize, 'old resize')
+    instance.my_flag = False
     """Если создали файл"""
     if instance.image.closed is False:
         print(1)
         instance.image_convert_jpeg()
+        if instance._old_image:
+            obj = sender.objects.get(pk=instance.pk)
+            instance._old_image=obj._old_image
+            instance.delete_image()
+            if instance.resize and obj._old_resize:
+                instance.my_flag = True
         return
     """Если произошло изменение названия продукта или брэнда"""
     if instance.pk is not None and instance.image.closed or kwargs['update_fields']:
@@ -53,9 +58,8 @@ def image_rename(sender, instance, **kwargs):
         instance.image_renames()
         instance.image_renames_os()
     """Если произошло изменение делать миниатюры, удаляет файлы миниатюр"""
-    if instance._old_resize != instance.resize and not instance.resize:
+    if instance._old_image and instance._old_resize != instance.resize and not instance.resize:
         print(3)
-        print(instance._old_image)
         instance.image_renames()
         instance.delete_resize_image()
     """Если произошло изменение делать миниатюры, создает файлы миниатюр"""
@@ -72,7 +76,7 @@ def image_rename(sender, instance, **kwargs):
 @receiver(post_save, sender=Image_Storage)
 def resize_image(sender, instance, **kwargs):
     if instance.pk is not None and instance.image and instance._old_resize != instance.resize and instance.resize \
-            and not kwargs['update_fields'] or kwargs['created'] and instance.resize:
+            and not kwargs['update_fields'] or kwargs['created'] and instance.resize or instance.my_flag:
         instance.create_resize_image()
 
 

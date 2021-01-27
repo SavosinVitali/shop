@@ -17,9 +17,8 @@ from file_storage.validations import FileValidator
 def upload_location_file(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
     classen = instance.content_object.__class__.__name__
-    return 'file_storage/%s/%s/files/%s_%s_%s.%s' % (slugify(instance.content_object.__class__.__name__),
+    return 'file_storage/%s/%s/files/%s-%s.%s' % (slugify(instance.content_object.__class__.__name__),
                                                      slugify(instance.content_object),
-                                                     slugify(instance.title_files),
                                                      slugify(instance.content_object),
                                                      slugify(instance.file_type),
                                                      extension)
@@ -39,7 +38,6 @@ def upload_location_image(instance, filename):
             image_all_order.append(image.image_order)
         for i in range(len(instance.Image_Order)):
             if not image_all_order.count(instance.Image_Order[i][0]):
-                print('------chislo------', instance.Image_Order[i][0])
                 instance.image_order = instance.Image_Order[i][0]
                 return 'file_storage/%s/%s/images/%s-%s.%s' % (slugify(instance.content_object.__class__.__name__),
                                                        slugify(instance.content_object),
@@ -84,7 +82,7 @@ class File_Storage(models.Model):
     files = models.FileField(upload_to=upload_location_file,
                              blank=False, verbose_name="Имя файла",
                            validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('application/pdf',))])
-    title_files = models.CharField(max_length=200, verbose_name="Название файла", null=True, blank=False, unique = True)
+    title_files = models.CharField(max_length=200, verbose_name="Название файла", null=True, blank=True)
     date_files = models.DateField(auto_now=True, verbose_name='Дата')
     file_type = models.ForeignKey(File_Type, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Тип файла")
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name="К чему относится файл")
@@ -110,6 +108,11 @@ class File_Storage(models.Model):
         self.files = upload_location_file(self, self.files.name)
         return self.files
 
+    def title_files_generator(self, *args, **kwargs):
+        self.title_files = '%s-%s. Фирма: %s Cтрана производства: %s' % (self.content_object,
+                                                                   self.file_type,
+                                                                   self.content_object.brand,
+                                                                   self.content_object.brand.country.name)
 
 
     def files_renames_os(self, *args, **kwargs):
@@ -235,6 +238,7 @@ class Image_Storage(models.Model):
             for name in names:
                 if os.path.isfile(name):
                     os.remove(name)
+
         else:
             if os.path.isfile(settings.MEDIA_ROOT + '/' + self._old_image.name):
                 os.remove(settings.MEDIA_ROOT + '/' + self._old_image.name)
@@ -242,7 +246,6 @@ class Image_Storage(models.Model):
     """Функция удаляет миниатюры на жестком диске"""
     def delete_resize_image(self, *args, **kwargs):
         names = image_name_generator(self.image.name)
-        print(names, 'delete resize image')
         for name in names:
             if names.index(name) != 0:
                 if os.path.isfile(name):
