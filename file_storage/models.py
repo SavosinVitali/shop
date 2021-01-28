@@ -15,13 +15,39 @@ from file_storage.validations import FileValidator
 
 
 def upload_location_file(instance, filename):
+    print(16)
     filebase, extension = filename.rsplit('.', maxsplit=1)
     classen = instance.content_object.__class__.__name__
-    return 'file_storage/%s/%s/files/%s-%s.%s' % (slugify(instance.content_object.__class__.__name__),
-                                                     slugify(instance.content_object),
-                                                     slugify(instance.content_object),
-                                                     slugify(instance.file_type),
-                                                     extension)
+    print(instance._old_files, 'old_files')
+    if instance._old_files:
+        print(17)
+        print(filename)
+        folder = filename.rsplit('-', maxsplit=2)
+        print(folder)
+        return 'file_storage/%s/%s/files/%s-%s-%s.%s' % (slugify(instance.content_object.__class__.__name__),
+                                                        slugify(instance.content_object),
+                                                        slugify(instance.content_object),
+                                                        slugify(instance.file_type),
+                                                        instance.file_type.name,
+                                                        extension)
+
+    else:
+        print(18)
+        product_all_files = instance.content_object.files.all()
+        files_all_file_type = []
+        for files in product_all_files:
+            files_all_file_type.append(files.file_type.name)
+        print(files_all_file_type, type(files_all_file_type))
+        print(files_all_file_type.count(instance.file_type.name))
+        # for i in range(len(instance.Image_Order)):
+        #     if not image_all_order.count(instance.Image_Order[i][0]):
+        #         instance.image_order = instance.Image_Order[i][0]
+        return 'file_storage/%s/%s/files/%s-%s-%s.%s' % (slugify(instance.content_object.__class__.__name__),
+                                                      slugify(instance.content_object),
+                                                      slugify(instance.content_object),
+                                                      slugify(instance.file_type),
+                                                      files_all_file_type.count(instance.file_type.name),
+                                                      extension)
 
 def upload_location_image(instance, filename):
     filebase, extension = filename.rsplit('.', maxsplit=1)
@@ -84,7 +110,7 @@ class File_Storage(models.Model):
                            validators=[FileValidator(max_size=1024 * 1024 * 5.1, content_types=('application/pdf',))])
     title_files = models.CharField(max_length=200, verbose_name="Название файла", null=True, blank=True)
     date_files = models.DateField(auto_now=True, verbose_name='Дата')
-    file_type = models.ForeignKey(File_Type, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Тип файла")
+    file_type = models.ForeignKey(File_Type, on_delete=models.SET_NULL, blank=False, null=True, verbose_name="Тип файла")
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name="К чему относится файл")
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey("content_type", "object_id")
@@ -105,6 +131,7 @@ class File_Storage(models.Model):
 
 
     def files_renames(self, *args, **kwargs):
+        print(14)
         self.files = upload_location_file(self, self.files.name)
         return self.files
 
@@ -116,6 +143,7 @@ class File_Storage(models.Model):
 
 
     def files_renames_os(self, *args, **kwargs):
+        print(15)
         if os.path.isfile(settings.MEDIA_ROOT + '/' + self._old_files.name):
             os.renames(settings.MEDIA_ROOT + '/' + self._old_files.name, settings.MEDIA_ROOT + '/' + self.files.name)
 

@@ -8,16 +8,20 @@ from file_storage.models import  Image_Storage, File_Storage
 def file_rename(sender, instance, **kwargs):
     instance.title_files_generator()
     if instance.pk is not None:
+        print(11)
         obj = sender.objects.get(pk=instance.pk)
-        instance._old_files= obj.files
+        print(instance._old_files, obj.files, 'pree save')
+        instance._old_files = obj.files
         instance._old_title_files = obj.title_files
         # names = upload_location_file(instance, old_self.files.url)
         if instance.pk is not None and instance.title_files != instance._old_title_files and instance.files.closed \
                 or kwargs['update_fields'] == frozenset({'files'}):
+            print(12)
             instance.files_renames()
             instance.files_renames_os()
 
         if instance.files and instance._old_files != instance.files:
+            print(13)
             instance._old_files.close()
             instance._old_files.delete(False)
 
