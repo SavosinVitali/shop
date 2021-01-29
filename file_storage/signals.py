@@ -8,22 +8,20 @@ from file_storage.models import  Image_Storage, File_Storage
 def file_rename(sender, instance, **kwargs):
     instance.title_files_generator()
     if instance.pk is not None:
-        print(11)
         obj = sender.objects.get(pk=instance.pk)
-        print(instance._old_files, obj.files, 'pree save')
         instance._old_files = obj.files
         instance._old_title_files = obj.title_files
         # names = upload_location_file(instance, old_self.files.url)
-        if instance.pk is not None and instance.title_files != instance._old_title_files and instance.files.closed \
+        if instance.pk is not None and instance._old_file_type != instance.file_type and instance.files.closed \
                 or kwargs['update_fields'] == frozenset({'files'}):
-            print(12)
             instance.files_renames()
             instance.files_renames_os()
 
         if instance.files and instance._old_files != instance.files:
-            print(13)
             instance._old_files.close()
-            instance._old_files.delete(False)
+            instance.delete_files()
+
+
 
 
 @receiver(pre_delete, sender=File_Storage)
@@ -47,7 +45,6 @@ def image_rename(sender, instance, **kwargs):
     instance.my_flag = False
     """Если создали файл"""
     if instance.image.closed is False:
-        print(1)
         instance.image_convert_jpeg()
         if instance._old_image:
             obj = sender.objects.get(pk=instance.pk)
@@ -58,21 +55,17 @@ def image_rename(sender, instance, **kwargs):
         return
     """Если произошло изменение названия продукта или брэнда"""
     if instance.pk is not None and instance.image.closed or kwargs['update_fields']:
-        print(2)
         instance.image_renames()
         instance.image_renames_os()
     """Если произошло изменение делать миниатюры, удаляет файлы миниатюр"""
     if instance._old_image and instance._old_resize != instance.resize and not instance.resize:
-        print(3)
         instance.image_renames()
         instance.delete_resize_image()
     """Если произошло изменение делать миниатюры, создает файлы миниатюр"""
     if instance._old_resize != instance.resize and instance.resize:
-        print(4)
         instance.image_renames()
     """Удаляет старые файлы если вабрано новое изображение"""
     if instance.image.closed is False and instance._old_image:
-        print(5)
         instance.delete_image()
 
 

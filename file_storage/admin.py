@@ -11,7 +11,7 @@ class File_StorageInline(GenericTabularInline):  #  Добавляем прод�
     model = File_Storage
     extra = 0
     fields = ('files', 'title_files', 'file_type', 'date_files')
-    readonly_fields = ('date_files',)
+    readonly_fields = ('date_files', 'title_files')
     view_on_site = False  # Ссылка смотреть на сайте get_absolute_url
     # can_delete = False  # можно ли удалять со страницы категорий товары
     # show_change_link = True  # ссылка на страницу редактирования товара

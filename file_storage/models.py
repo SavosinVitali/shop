@@ -15,33 +15,21 @@ from file_storage.validations import FileValidator
 
 
 def upload_location_file(instance, filename):
-    print(16)
-    filebase, extension = filename.rsplit('.', maxsplit=1)
-    classen = instance.content_object.__class__.__name__
-    print(instance._old_files, 'old_files')
     if instance._old_files:
-        print(17)
-        print(filename)
-        folder = filename.rsplit('-', maxsplit=2)
-        print(folder)
+        filebase, extension = instance._old_files.name.rsplit('.', maxsplit=1)
+        prefics = filebase.rsplit('-', maxsplit=1)
         return 'file_storage/%s/%s/files/%s-%s-%s.%s' % (slugify(instance.content_object.__class__.__name__),
                                                         slugify(instance.content_object),
                                                         slugify(instance.content_object),
                                                         slugify(instance.file_type),
-                                                        instance.file_type.name,
+                                                        prefics[1],
                                                         extension)
-
     else:
-        print(18)
+        filebase, extension = filename.rsplit('.', maxsplit=1)
         product_all_files = instance.content_object.files.all()
         files_all_file_type = []
         for files in product_all_files:
             files_all_file_type.append(files.file_type.name)
-        print(files_all_file_type, type(files_all_file_type))
-        print(files_all_file_type.count(instance.file_type.name))
-        # for i in range(len(instance.Image_Order)):
-        #     if not image_all_order.count(instance.Image_Order[i][0]):
-        #         instance.image_order = instance.Image_Order[i][0]
         return 'file_storage/%s/%s/files/%s-%s-%s.%s' % (slugify(instance.content_object.__class__.__name__),
                                                       slugify(instance.content_object),
                                                       slugify(instance.content_object),
@@ -128,6 +116,7 @@ class File_Storage(models.Model):
         super(File_Storage, self).__init__(*args, **kwargs)
         self._old_files = self.files
         self._old_title_files = self.title_files
+        self._old_file_type = self.file_type
 
 
     def files_renames(self, *args, **kwargs):
