@@ -133,6 +133,7 @@ USE_L10N = True
 USE_TZ = True
 
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
@@ -144,3 +145,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 RESIZES_IMAGE = (600, 600)
 SIZE_DOWNLOAD_IMAGE = (600, 600)
 SIZES_IMAGE = [(240, 240), (360, 360)]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]

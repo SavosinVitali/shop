@@ -3,13 +3,14 @@ from django.template.defaultfilters import filesizeformat
 import magic
 from django.utils.deconstruct import deconstructible
 
+
 @deconstructible
 class FileValidator(object):
     error_messages = {
-     'no_file': "Файл удален выберите другой файл либо очиститe",
-     'max_size': "Вы привысили максимальный размер файла %(max_size)s, Размер вашего файла %(size)s",
-     'min_size': "Минимальный размер загружаемого файла %(min_size)s, Размер вашего файла %(size)s",
-     'content_type': "Тип загружаемого файла %(content_type)s. Загрузиет %(old_content_type)s",
+        'no_file': "Файл удален выберите другой файл либо очиститe",
+        'max_size': "Вы привысили максимальный размер файла %(max_size)s, Размер вашего файла %(size)s",
+        'min_size': "Минимальный размер загружаемого файла %(min_size)s, Размер вашего файла %(size)s",
+        'content_type': "Тип загружаемого файла %(content_type)s. Загрузиет %(old_content_type)s",
     }
 
     def __init__(self, max_size=None, min_size=None, content_types=()):

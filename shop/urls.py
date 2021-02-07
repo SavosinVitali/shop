@@ -18,13 +18,14 @@ from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
-
+from .views import BaseView
 
 
 urlpatterns = [
 
 
     path('admin', admin.site.urls),
+    path('', BaseView.as_view(), name='base'),
     # re_path(r'^favicon/.ico$', RedirectView.as_view(url='/static/favicon.ico', permanent=True)), #картинка favicon.ico
     re_path(r'^favicon\.ico$', RedirectView.as_view(url=settings.MEDIA_URL + 'Path_to_favicon_file')),
     # path('', include('category.urls' ))
