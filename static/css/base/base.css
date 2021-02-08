@@ -14,18 +14,22 @@
 
 }
 body, html{
-    /*overflow-x: hidden;*/
-    margin: 0 auto;
+    /*!*overflow-x: hidden;*!*/
+    /*margin: 0 auto;*/
 }
 .header-top{
     max-width: 1576px;
+    height: 30px;
     display: flex;
-}
-nav {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
     margin: 0 auto;
-    display: flex;
-    width: 100%;
+    align-items: flex-end;
+    background: #007bff;
+
 }
+
 #checkbox-menu,
 .toogle{
     display: none;
@@ -33,20 +37,16 @@ nav {
 .menu{
     padding: 0;
     margin: 0;
-    height: 30px;
+    height: 18px;
     display: flex;
+    justify-content: flex-start;
     padding-inline-start: 31px;
     padding-inline-end: 40px;
-    /*флексбокс разметка*/
-    flex-direction: row;
-    /*направление элементов слева на право*/
-    justify-content: start;
-    /*выравнивание вдоль главной оси*/
-    align-items:center;
-    /*элементы равномерно распределены po visote*/
+    align-items: flex-end;
     list-style-type: none;
-    /*flex-basis: 100px;*/
-    /*flex-shrink: 0;*/
+    flex-wrap: wrap;
+    overflow: hidden;
+
 
 
 }
@@ -55,15 +55,9 @@ nav {
     color: #333333;
     text-decoration: none;
     white-space: nowrap;
-    /*убираем перенос текста в меню*/
-    /*  убираем подчеркивание ссылок  */
-    /*align-self: center;*/
-    /*!*  выравнивание флех элементов по текушей линии  *!*/
     font-size: 16px;
     font-family: "PT";
     padding: 0px 9px;
-    /*height: 30px;*/
-    /*transition: background 200ms linear;*/
 }
 .menu li a:hover{
     background: #eff1f2;
@@ -74,94 +68,98 @@ nav {
     margin-right: 20px;
     color: #999999;
 }
-.header__area-text{
+.header__area{
     font-family: "PT";
     color: #949495;
     font-size: 16px;
     white-space: nowrap;
     padding: 0px 9px;
-    align-self: center;
+    display: flex;
+    /*height: 18px;*/
+    background: #5cb85c;
+
 }
-.header__area-contacts{
-    align-self: center;
-    padding-right: 40px;
+
+.header__phone-value {
+    text-decoration: none;
+    color: #333333;
+    padding-left: 30px;
+
+
 }
 .header__phone-value{
     font-family: "PT";
     font-size: 16px;
-    white-space: nowrap;
-    text-decoration: none;
-    color: #333333;
-    padding: 0px 9px;
+
 
 }
-@media screen and (max-width: 765px){
-    .header-top{
-        padding: 0px;
-    }
-    .header__area-text{
-        display: none;
 
-    }
-    .header__area-contacts{
-         display: none;
+/*@media screen and (max-width: 765px){*/
+/*    .header-top{*/
+/*        padding: 0px;*/
+/*    }*/
+/*    .header__area-text{*/
+/*        display: none;*/
 
-    }
-    label{
-    width: 100%;
-}
+/*    }*/
+/*    .header__area-contacts{*/
+/*         display: none;*/
+
+/*    }*/
+/*    label{*/
+/*    width: 100%;*/
+/*}*/
 
 
-    .toogle{
-        clear: both;
-        padding: 0px;
-        display: block;
-        text-align: center;
-        font-size: 20px;
-        line-height: 40px;
-        width: 100%;
-        color: #f5f5f5;
-        background: #1d2839;
-        transition: all .1s linear;
+/*    .toogle{*/
+/*        clear: both;*/
+/*        padding: 0px;*/
+/*        display: block;*/
+/*        text-align: center;*/
+/*        font-size: 20px;*/
+/*        line-height: 40px;*/
+/*        width: 100%;*/
+/*        color: #f5f5f5;*/
+/*        background: #1d2839;*/
+/*        transition: all .1s linear;*/
 
-    }
-    .toogle:hover{
-        background: #1d2839;
-    }
-    #checkbox-menu:checked + label .touch li{
-        opacity: 1;
-        visibility: visible;
-        transition: all .20s linear;
-    /*    poyavlenie punktov menu i cherny cvet*/
-    }
-    #checkbox-menu:checked + label .touch {
-        height: 350px;
-        /*transition: all .20s linear;*/
-    }
-    .menu{
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
-        height: 0px;
-        transition: height .20s linear;
+/*    }*/
+/*    .toogle:hover{*/
+/*        background: #1d2839;*/
+/*    }*/
+/*    #checkbox-menu:checked + label .touch li{*/
+/*        opacity: 1;*/
+/*        visibility: visible;*/
+/*        transition: all .20s linear;*/
+/*    !*    poyavlenie punktov menu i cherny cvet*!*/
+/*    }*/
+/*    #checkbox-menu:checked + label .touch {*/
+/*        height: 350px;*/
+/*        !*transition: all .20s linear;*!*/
+/*    }*/
+/*    .menu{*/
+/*        display: flex;*/
+/*        flex-direction: column;*/
+/*        justify-content: space-around;*/
+/*        align-items: center;*/
+/*        height: 0px;*/
+/*        transition: height .20s linear;*/
 
-    }
-    .menu li{
-        display: flex;
-        align-self: center;
-        width: 95%;
-        opacity: 0;
-        visibility: hidden;
-    }
-    .menu li a{
-        width: 95%;
-        text-align: center;
-        align-self: center;
-        align-content: center;
-    }
-    .menu li.text, li.tel{
-        display: none;
-    }
+/*    }*/
+/*    .menu li{*/
+/*        display: flex;*/
+/*        align-self: center;*/
+/*        width: 95%;*/
+/*        opacity: 0;*/
+/*        visibility: hidden;*/
+/*    }*/
+/*    .menu li a{*/
+/*        width: 95%;*/
+/*        text-align: center;*/
+/*        align-self: center;*/
+/*        align-content: center;*/
+/*    }*/
+/*    .menu li.text, li.tel{*/
+/*        display: none;*/
+/*    }*/
 
-}
