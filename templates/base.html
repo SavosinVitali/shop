@@ -11,10 +11,11 @@
 </head>
 <body>
 	<header>
-		<div class="header-top">
-		<nav>
-			<input type="checkbox" name="" id="checkbox-menu">
+        <div class="header-root">
+            <input type="checkbox" name="" id="checkbox-menu">
 			<label for="checkbox-menu">
+            <div class="header-top">
+                <nav>
 				<ul class="menu touch">
 					<li><a href="#">Каталог</a></li>
 					<li><a href="#">О компании</a></li>
@@ -24,17 +25,36 @@
 					<li><a href="#">Личный кабинет</a></li>
 					<li><a href="#">Новости</a></li>
 				</ul>
-				<span class="toogle">☰</span>
-			</label>
-		</nav>
-			<div class="header__area">
-                <div class="header__work-time">Доставка с 8:00 до 23:00</div>
-                <div class="header__phone">
-                    <a class="header__phone-value" href="tel:+375293065030">+375293065030</a>
+		        </nav>
+                <div class="header-top-area">
+                    <div class="header-top-time">Доставка с 8:00 до 23:00</div>
+                    <div class="header-top-phone">
+                        <a class="header-top-phone-value" href="tel:+375293065030">+375293065030</a>
+                    </div>
+                </div>
+            </div>
+            <div class="header-bottom">
+                <div class="header-bottom-logo">
+                    <a href="logo.html"><img src="{% static 'image/logo.png' %}" alt="logo"></a>
+                </div>
+                <div class="header-bottom-search">
+                    <form>
+                        <input type="text" id="fname" name="fname" value="" placeholder="Поиск">
+                        <button type="submit" value="Submit">
+                            <span class="icon-search"></span>
+                        </button>
+                    </form>
+                </div>
+                <div class="header-bottom-controls">
+                    <a href="#" ><span class="icon icon-user"></span></a>
+                    <a href="#" ><span class="icon icon-compare"></span></a>
+                    <a href="#" ><span class="icon icon-cart"></span></a>
                 </div>
 
             </div>
-		</div>
+            <span class="toogle">☰</span>
+            </label>
+        </div>
 	</header>
 
 </body>
