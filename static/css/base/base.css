@@ -176,6 +176,10 @@ body, html{
     height: 30px;
 
 }
+#sub_menu{
+   /*display: none;*/
+    visibility: hidden;
+}
 .icon-user{
     background: url("../../image/icon-user.svg");
 
