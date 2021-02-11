@@ -17,15 +17,25 @@
             <div class="header-top">
                 <nav>
 				<ul class="menu touch">
-					<li><a href="#">Каталог</a></li>
-					<li><a href="#">О компании</a></li>
-					<li><a href="#">Контакты</a></li>
-					<li><a href="#">Доставка</a></li>
-					<li><a href="#">Оплата</a></li>
-					<li><a href="#">Личный кабинет</a></li>
-					<li id="sub_menu"><a href="#">Новости</a></li>
+					<li class="flex-item"><a href="#">Каталог</a></li>
+					<li class="flex-item"><a href="#">О компании</a></li>
+					<li class="flex-item"><a href="#">Контакты</a></li>
+					<li class="flex-item"><a href="#">Доставка</a></li>
+					<li class="flex-item"><a href="#">Оплата</a></li>
+					<li class="flex-item"><a href="#">Личный кабинет</a></li>
+					<li class="flex-item" ><a href="#">Новости</a></li>
+
 				</ul>
+
 		        </nav>
+                <div class="drop-menu">
+{#                    <span class="icon-drop-menu">#}
+                        <ul class="drop-menu-touch">
+                            <li class="flex-item"><a href="#">Каталог</a></li>
+					        <li class="flex-item"><a href="#">О компании</a></li>
+                        </ul>
+{#                    </span>#}
+                </div>
                 <div class="header-top-area">
                     <div class="header-top-time">Доставка с 8:00 до 23:00</div>
                     <div class="header-top-phone">
@@ -56,6 +66,7 @@
             </label>
         </div>
 	</header>
+
 <script
   src="https://code.jquery.com/jquery-3.5.1.js"
   integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
