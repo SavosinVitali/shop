@@ -37,9 +37,9 @@ body, html{
     justify-content: space-between;
     flex-wrap: nowrap;
     padding: 0 30px;
-    overflow: hidden;
-    height: 30px;
-    align-items: flex-end;
+    /*overflow: hidden;*/
+    height: 50px;
+    align-items: center;
 
 }
 .menu{
@@ -59,7 +59,9 @@ body, html{
     padding-right: 18px;
 
 }
-
+li a:hover {
+    text-shadow: 0 0 .65px #333, 0 0 .65px #333;
+}
 .header-top-area{
     display: flex;
     justify-content: flex-start;
@@ -78,40 +80,56 @@ body, html{
     text-decoration: none;
 }
 .drop-menu {
-    position: relative;
-    display: inline-block;
-    flex-basis: 150px;
-    width: 50px;
-    height: 50px;
-    background: #CC3434;
+    /*position: relative;*/
+    /*display: inline-block;*/
+    /*flex-basis: 150px;*/
+    /*width: 50px;*/
+    /*height: 50px;*/
+    /*background: #CC3434;*/
 
 }
-/*.drop-menu span{*/
-/*    position: absolute;*/
-/*    background: url("../../image/points.svg");*/
-/*    top: 70%;*/
-/*    left: 50%;*/
-/*    transform: translate(-50%, -50%);*/
-/*    background-size: cover;*/
-/*    width: 20px;*/
-/*    height: 20px;*/
-/*}*/
+.drop-menu span{
+    display: block;
+    background: url("../../image/points.svg");
+    background-size: cover;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    position: relative;
+}
+.drop-menu span:hover >ul{
+    visibility: visible;
+}
+
 ul.drop-menu-touch{
-    /*position: absolute;*/
+    visibility: hidden;
+    position: absolute;
     display: flex;
     flex-direction: column;
-    width: 50px;
-    height: 50px;
+    align-items: flex-start;
+    width: auto;
+    height: auto;
+    top: 20px;
+    left: auto;
+    list-style-type: none;
+    background: white;
+    border: 1px solid #f7f7f7;
+    /*transform: translate(-35%, 0);*/
+    /*z-index: 1;*/
 
 }
 ul.drop-menu-touch li{
-    position: absolute;
-    display: block;
+    /*position: absolute;*/
+    /*display: block;*/
 }
 .drop-menu-touch li a{
+    display: block;
     color: #333333;
     text-decoration: none;
-    padding-right: 18px;
+    padding: 6px 0;
+    /*padding-right: 18px;*/
+
+
 
 }
 /*____________________________________________header botton________________________________*/

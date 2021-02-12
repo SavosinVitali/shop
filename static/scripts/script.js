@@ -10,8 +10,9 @@ $(window).resize(function() {
 function wrapped() {
     var offset_top_prev;
     $('.flex-item').each(function() {
+
        var offset_top = $(this).offset().top;
-      if (offset_top > 12) {
+      if (offset_top > 16) {
             if($(this).hasClass('wrapped')){
 
              }else{
@@ -24,7 +25,7 @@ function wrapped() {
 
 
 
-      } else if (offset_top == 12) {
+      } else if (offset_top == 16) {
           if($(this).hasClass('wrapped'))
           {
               $(this).removeClass('wrapped');
@@ -40,5 +41,12 @@ function wrapped() {
    offset_top_prev = offset_top;
    });
 }
+
+
+$(function() {
+  $('.drop-menu span').click(function() {
+    $('ul.drop-menu-touch').css("visibility","visible");
+  });
+});
 
     });
