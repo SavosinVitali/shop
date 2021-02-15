@@ -5,7 +5,7 @@ wrapped();
 
 $(window).resize(function() {
    width = $(window).width();
-    if (width >= 768) {
+    if (width >= 268) {
         wrapped();
 
     }
@@ -16,15 +16,17 @@ function wrapped() {
     $('.flex-item').each(function() {
 
        var offset_top = $(this).offset().top;
-       console.log($(this).offset().top)
       if (offset_top > 16) {
 
             if($(this).hasClass('wrapped')){
 
              }else{
-
+                // console.log($('.menu').width()-$(this).width());
                 $(this).addClass('wrapped');
                 $(".drop-menu").css("display","block");
+                $(".drop-menu").css("position","absolute");
+                $(".drop-menu").css("top","16px");
+                $(".drop-menu").css("left",$('.menu').width()-$(this).width()+50);
                 $(this).clone().appendTo(".drop-menu-touch:last");
 
             }
