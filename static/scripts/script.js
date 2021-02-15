@@ -4,7 +4,10 @@ $(document).ready(function(){
 wrapped();
 
 $(window).resize(function() {
-   wrapped();
+   width = $(window).width();
+    if (width >= 2200) {
+        wrapped();
+    }
 });
 
 function wrapped() {
