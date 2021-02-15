@@ -60,7 +60,7 @@ body, html{
 
 }
 li a:hover {
-    text-shadow: 0 0 .65px #333, 0 0 .65px #333;
+    text-shadow: 0 0 .5px #666, 0 0 .5px #666;
 }
 .header-top-area{
     display: flex;
