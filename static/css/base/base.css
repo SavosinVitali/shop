@@ -7,6 +7,7 @@
 }
 
 
+
 *{
     padding: 0;
     margin: 0;
@@ -44,36 +45,37 @@ body, html{
 }
 .header-top-menu{
     display: flex;
-    flex-direction: row;
     justify-content: flex-start;
+    flex-direction: row;
     flex-wrap: nowrap;
-    height: 18px;
-    align-items: center;
-    background: #5cb85c;
-/*    ---------------*/
-    margin: 0 auto;
+
+
 
 }
 
 .menu{
+
     display: flex;
     justify-content: flex-start;
+    flex-direction: row;
     flex-wrap: wrap;
+
     padding: 0;
-    /*margin: 0;*/
     height: 18px;
     overflow: hidden;
     list-style-type: none;
-    background: #007bff;
-    width: 100%;
-
-
-
-
+    /*background: red;*/
 
 }
+/*.menu-test li{*/
+/*    margin-right: auto;*/
+
+
+/*}*/
 .menu li a{
-    display: block;
+    height: 18px;
+
+    /*display: block;*/
     color: #333333;
     text-decoration: none;
     padding-left: 8px;
@@ -102,30 +104,20 @@ li a:hover {
     text-decoration: none;
 }
 .drop-menu {
-    width: auto;
-    /*display: block;*/
-    /*flex-grow: 2;*/
-    /*flex-basis:100px*/
+    display: none;
 
-
-    /*flex-basis: auto;*/
-    /*position: relative;*/
-    /*display: inline-block;*/
-    /*flex-basis: 150px;*/
-    /*width: 50px;*/
-    /*height: 50px;*/
-    /*background: #CC3434;*/
 
 }
-/*.drop-menu span{*/
-/*    display: block;*/
-/*    background: url("../../image/points.svg");*/
-/*    background-size: cover;*/
-/*    width: 20px;*/
-/*    height: 20px;*/
-/*    cursor: pointer;*/
-/*    position: relative;*/
-/*}*/
+
+.drop-menu span{
+    display: block;
+    background: url("../../image/points.svg");
+    background-size: cover;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    position: relative;
+}
 .drop-menu span:hover >ul{
     visibility: visible;
 }
@@ -147,10 +139,10 @@ ul.drop-menu-touch{
     /*z-index: 1;*/
 
 }
-ul.drop-menu-touch li{
-    /*position: absolute;*/
-    /*display: block;*/
-}
+/*ul.drop-menu-touch li{*/
+/*    position: absolute;*/
+/*    display: block;*/
+/*}*/
 .drop-menu-touch li a{
     display: block;
     color: #333333;
