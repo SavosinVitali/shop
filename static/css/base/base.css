@@ -15,7 +15,7 @@
 }
 body, html{
     /*!*overflow-x: hidden;*!*/
-    /*margin: 0 auto;*/
+    margin: 0 auto;
 
 }
 .header-root{
@@ -38,7 +38,6 @@ body, html{
     justify-content: space-between;
     flex-wrap: nowrap;
     padding: 0 30px;
-    /*overflow: hidden;*/
     height: 50px;
     align-items: center;
 
@@ -64,18 +63,12 @@ body, html{
     height: 18px;
     overflow: hidden;
     list-style-type: none;
-    /*background: red;*/
+
 
 }
-/*.menu-test li{*/
-/*    margin-right: auto;*/
 
-
-/*}*/
 .menu li a{
     height: 18px;
-
-    /*display: block;*/
     color: #333333;
     text-decoration: none;
     padding-left: 8px;
@@ -128,27 +121,20 @@ ul.drop-menu-touch{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: auto;
-    height: auto;
-    top: 20px;
-    left: auto;
+    top: 16px;
     list-style-type: none;
     background: white;
     border: 1px solid #f7f7f7;
-    /*transform: translate(-35%, 0);*/
-    /*z-index: 1;*/
+
 
 }
-/*ul.drop-menu-touch li{*/
-/*    position: absolute;*/
-/*    display: block;*/
-/*}*/
+
 .drop-menu-touch li a{
     display: block;
     color: #333333;
     text-decoration: none;
-    padding: 6px 0;
-    /*padding-right: 18px;*/
+    padding: 5px 0;
+
 
 
 
@@ -174,7 +160,7 @@ ul.drop-menu-touch{
 
 }
 .header-bottom-search{
-    flex-basis: 650px;
+    flex-basis: 850px;
     /*height: 70px;*/
     display: flex;
     flex-direction: row;
