@@ -21,7 +21,6 @@ function wrapped() {
             if($(this).hasClass('wrapped')){
 
              } else {
-
                 $(this).addClass('wrapped');
                 $(".drop-menu").css("display","block");
                 $(".drop-menu").css("position","absolute");

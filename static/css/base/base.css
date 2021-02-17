@@ -24,7 +24,6 @@ body, html{
     flex-direction: column;
     flex-wrap: nowrap;
     margin: 0 auto;
-    white-space: nowrap;
     font-family: "PT";
     font-size: 16px;
 }
@@ -40,6 +39,7 @@ body, html{
     padding: 0 30px;
     height: 50px;
     align-items: center;
+
 
 }
 .header-top-menu{
@@ -61,7 +61,7 @@ body, html{
 
     padding: 0;
     height: 18px;
-    overflow: hidden;
+    /*overflow: hidden;*/
     list-style-type: none;
 
 
@@ -98,8 +98,6 @@ li a:hover {
 }
 .drop-menu {
     display: none;
-
-
 }
 
 .drop-menu span{
@@ -111,7 +109,13 @@ li a:hover {
     cursor: pointer;
     position: relative;
 }
+.wrapped{
+    visibility: hidden;
+}
 .drop-menu span:hover >ul{
+    visibility: visible;
+}
+.drop-menu span:hover ul > li{
     visibility: visible;
 }
 
@@ -125,9 +129,8 @@ ul.drop-menu-touch{
     list-style-type: none;
     background: white;
     border: 1px solid #f7f7f7;
-
-
 }
+
 
 .drop-menu-touch li a{
     display: block;
@@ -148,7 +151,7 @@ ul.drop-menu-touch{
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    margin-top: 20px;
+
 }
 .header-bottom-logo{
        /*height: 50px;*/
@@ -239,10 +242,7 @@ ul.drop-menu-touch{
     height: 30px;
 
 }
-#sub_menu{
-   /*display: none;*/
-   /* visibility: hidden;*/
-}
+
 .icon-user{
     background: url("../../image/icon-user.svg");
 
@@ -253,6 +253,55 @@ ul.drop-menu-touch{
 .icon-compare{
     background: url("../../image/icon-compare.svg");
 }
+
+
+/*____________________________________________header category________________________________*/
+.header-category {
+    display:block;
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*justify-content: space-around;*/
+    /*flex-wrap: wrap;*/
+    padding: 0px 30px;
+    /*!*height: 70px;*!*/
+    /*align-items: flex-start;*/
+    /*background: #8a6d3b;*/
+}
+.menu-category{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    /*height: 20px;*/
+    list-style-type: none;
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+}
+.menu-category li {
+    height: 100px;
+    align-self: center;
+    flex: 0 0 166px;
+    border: 1px solid black;
+
+
+}
+.menu-category li a {
+
+    display: block;
+    color: #333333;
+    text-decoration: none;
+    text-align: center;
+    /*text-transform: uppercase;*/
+
+    /*height: 70px;*/
+    /*width: 200px;*/
+
+
+}
+
+
+
 /*#checkbox-menu,*/
 /*.toogle{*/
 /*    display: none;*/
