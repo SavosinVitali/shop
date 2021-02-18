@@ -76,9 +76,9 @@ body, html{
 
 
 }
-li a:hover {
-    text-shadow: 0 0 .5px #666, 0 0 .5px #666;
-}
+/*li a:hover {*/
+/*    text-shadow: 0 0 .5px #666, 0 0 .5px #666;*/
+/*}*/
 .header-top-area{
     display: flex;
     justify-content: flex-start;
@@ -270,36 +270,62 @@ ul.drop-menu-touch{
 .menu-category{
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: stretch;
     /*height: 20px;*/
     list-style-type: none;
     flex-wrap: wrap;
 
-    justify-content: center;
+    justify-content: flex-start;
 
 }
 .menu-category li {
-    height: 100px;
-    align-self: center;
-    flex: 0 0 166px;
-    border: 1px solid black;
+    /*height: 100%;*/
+    /*align-self: stretch;*/
+    flex: 1 0 135px;
+    border: 1px solid  #f7f7f7;
+    cursor: pointer;
 
 
+    /*position: relative;*/
 }
+.menu-category li:hover {
+    background:  #f7f7f7;
+}
+
+/*.menu-category li:before {*/
+/*    content:" ";*/
+/*    background: url("../../image/icon-user.svg");*/
+/*    font-size: 15px;*/
+/*    position: relative;*/
+/*    display: block;*/
+/*    margin: 5px auto;*/
+/*    height: 20px;*/
+/*    width: 20px;*/
+
+
+/*}*/
 .menu-category li a {
 
-    display: block;
+
+    font-size: 12px;
     color: #333333;
     text-decoration: none;
     text-align: center;
-    /*text-transform: uppercase;*/
-
-    /*height: 70px;*/
-    /*width: 200px;*/
-
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
 
 }
+.menu-category li a img{
+    /*display: block;*/
+    text-decoration: none;
+    flex: 0 0 25px;
+    height: 25px;
+    /*margin: 2px auto;*/
 
+}
 
 
 /*#checkbox-menu,*/
