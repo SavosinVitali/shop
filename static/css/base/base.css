@@ -39,6 +39,7 @@ body, html{
     padding: 0 30px;
     height: 50px;
     align-items: center;
+    white-space: nowrap;
 
 
 }
@@ -258,20 +259,13 @@ ul.drop-menu-touch{
 /*____________________________________________header category________________________________*/
 .header-category {
     display:block;
-    /*display: flex;*/
-    /*flex-direction: row;*/
-    /*justify-content: space-around;*/
-    /*flex-wrap: wrap;*/
     padding: 0px 30px;
-    /*!*height: 70px;*!*/
-    /*align-items: flex-start;*/
-    /*background: #8a6d3b;*/
 }
 .menu-category{
     display: flex;
     flex-direction: row;
     align-items: stretch;
-    /*height: 20px;*/
+
     list-style-type: none;
     flex-wrap: wrap;
 
@@ -279,34 +273,21 @@ ul.drop-menu-touch{
 
 }
 .menu-category li {
-    /*height: 100%;*/
-    /*align-self: stretch;*/
     flex: 1 0 135px;
-    border: 1px solid  #f7f7f7;
     cursor: pointer;
-
-
-    /*position: relative;*/
+    border: 1px solid #f7f7f7;
+    margin: 0 3px;
 }
-.menu-category li:hover {
+.menu-category li:hover{
     background:  #f7f7f7;
 }
 
-/*.menu-category li:before {*/
-/*    content:" ";*/
-/*    background: url("../../image/icon-user.svg");*/
-/*    font-size: 15px;*/
-/*    position: relative;*/
-/*    display: block;*/
-/*    margin: 5px auto;*/
-/*    height: 20px;*/
-/*    width: 20px;*/
+.menu-category li a:hover > svg{
+    fill: darkgreen;
+    z-index: 4;
+}
 
-
-/*}*/
 .menu-category li a {
-
-
     font-size: 12px;
     color: #333333;
     text-decoration: none;
@@ -314,17 +295,32 @@ ul.drop-menu-touch{
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content:space-between;
     align-items: stretch;
+}
+
+.menu-category li a svg{
+    text-decoration: none;
+    /*flex: 0 0 25px;*/
+    /*height: 25px;*/
+    margin: 2px auto;
+}
+
+
+.menu-category li a span{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 2px auto;
+
+    font-size: 13px;
+    flex-grow: 1;
+
 
 }
-.menu-category li a img{
-    /*display: block;*/
-    text-decoration: none;
-    flex: 0 0 25px;
-    height: 25px;
-    /*margin: 2px auto;*/
 
+svg:hover path {
+    fill: red;
 }
 
 
