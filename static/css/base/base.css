@@ -260,32 +260,42 @@ ul.drop-menu-touch{
 .header-category {
     display:block;
     padding: 0px 30px;
+
+    /*position: relative;*/
+
+
 }
 .menu-category{
     display: flex;
+
     flex-direction: row;
     align-items: stretch;
 
     list-style-type: none;
     flex-wrap: wrap;
-
     justify-content: flex-start;
 
 }
+
 .menu-category li {
-    flex: 1 0 135px;
+    flex: 0 0 135px;
     cursor: pointer;
     border: 1px solid #f7f7f7;
     margin: 0 3px;
+    /*position: inherit;*/
+    height: 70px;
+
+
 }
 .menu-category li:hover{
     background:  #f7f7f7;
+
+}
+.menu-category li:hover > ul{
+    visibility: visible;
+    opacity:1;
 }
 
-.menu-category li a:hover > svg{
-    fill: darkgreen;
-    z-index: 4;
-}
 
 .menu-category li a {
     font-size: 12px;
@@ -297,13 +307,17 @@ ul.drop-menu-touch{
     flex-direction: column;
     justify-content:space-between;
     align-items: stretch;
+
+
 }
 
-.menu-category li a svg{
+.menu-category li a img{
+    display: block;
     text-decoration: none;
     /*flex: 0 0 25px;*/
-    /*height: 25px;*/
+    height: 25px;
     margin: 2px auto;
+    /*position: inherit;*/
 }
 
 
@@ -316,14 +330,36 @@ ul.drop-menu-touch{
     font-size: 13px;
     flex-grow: 1;
 
-
 }
 
-svg:hover path {
-    fill: red;
+.menu-category-sub{
+    opacity:0;
+    visibility:hidden;
+
+    transition:visibility 0.5s linear,opacity 0.5s linear;
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    flex-wrap: wrap;
+
+    position: fixed;
+
+    justify-content: flex-start;
+    align-items: stretch;
+    width: auto;
+
+
+
 }
+.menu-category-sub li {
+    flex: 0 0 135px;
 
-
+    border: 1px solid #f7f7f7;
+    /*cursor: pointer;*/
+    /*border: 1px solid #f7f7f7;*/
+    /*margin: 0 3px;*/
+    /*height: 70px;*/
+}
 /*#checkbox-menu,*/
 /*.toogle{*/
 /*    display: none;*/

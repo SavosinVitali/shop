@@ -2,30 +2,6 @@ $(document).ready(function(){
 
 
 
-$('img[src$=".svg"]').each(function() {
-        var $img = jQuery(this);
-        var imgURL = $img.attr('src');
-        var attributes = $img.prop("attributes");
-
-        $.get(imgURL, function(data) {
-            // Get the SVG tag, ignore the rest
-            var $svg = jQuery(data).find('svg');
-
-            // Remove any invalid XML tags
-            $svg = $svg.removeAttr('xmlns:a');
-
-            // Loop through IMG attributes and apply on SVG
-            $.each(attributes, function() {
-                $svg.attr(this.name, this.value);
-            });
-
-            // Replace IMG with SVG
-            $svg.attr('height', 25);
-            $svg.attr('width', 25);
-            $img.replaceWith($svg);
-        }, 'xml');
-    });
-
 
 
 
@@ -75,6 +51,8 @@ function wrapped() {
           }
       }
 
+
+
    });
 }
 
@@ -84,6 +62,14 @@ function wrapped() {
 //     $('ul.drop-menu-touch').css("visibility","visible");
 //   });
 // });
+     $(".menu-category li").hover(
+            function(){
+
+                console.log($(".menu-category").offset().top)
+                console.log($(".menu-category").height())
+                $(".menu-category-sub").css("top",$(".menu-category").height()+$(".menu-category").offset().top);
+                $(".menu-category-sub").css("left",$(".menu-category").offset().left);
+                    });
 
     });
 
