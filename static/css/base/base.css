@@ -277,28 +277,27 @@ ul.drop-menu-touch{
 
 }
 
-.menu-category li {
-    flex: 0 0 135px;
-    cursor: pointer;
+.menu-category > li {
+    flex: 1 0 140px;
+    /*cursor: pointer;*/
     border: 1px solid #f7f7f7;
     margin: 0 3px;
     /*position: inherit;*/
     height: 70px;
 
-
 }
-.menu-category li:hover{
+.menu-category > li:hover{
     background:  #f7f7f7;
 
 }
-.menu-category li:hover > ul{
+.menu-category > li:hover > ul{
     visibility: visible;
     opacity:1;
 }
 
 
-.menu-category li a {
-    font-size: 12px;
+.menu-category > li > a {
+
     color: #333333;
     text-decoration: none;
     text-align: center;
@@ -311,7 +310,7 @@ ul.drop-menu-touch{
 
 }
 
-.menu-category li a img{
+.menu-category > li > a > img{
     display: block;
     text-decoration: none;
     /*flex: 0 0 25px;*/
@@ -321,44 +320,129 @@ ul.drop-menu-touch{
 }
 
 
-.menu-category li a span{
+.menu-category > li > a > span{
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     margin: 2px auto;
 
-    font-size: 13px;
+    font-size: 14px;
     flex-grow: 1;
 
 }
+/*.main-category-sub{*/
+/*    position: absolute;*/
+/*    background:  #f7f7f7;*/
+/*    margin: 0px auto;*/
+/*    width: 100%;*/
+/*    left: 30px;*/
+/*    max-width: 1576px;*/
+
+
+/*}*/
 
 .menu-category-sub{
     opacity:0;
     visibility:hidden;
+     background:  #f7f7f7;
 
     transition:visibility 0.5s linear,opacity 0.5s linear;
     display: flex;
     flex-direction: row;
     list-style-type: none;
     flex-wrap: wrap;
+    /*right: 80px;*/
+    /*max-width: 1573px;*/
 
-    position: fixed;
+    /*!*width: 100%;*!*/
+    position: absolute;
 
+    justify-content: space-around;
+    /*align-content: space-between;*/
+    padding: 0px 40px 10px 40px;
+    /*width: 100%;*/
+    margin: 0 auto;
+
+
+}
+
+.menu-category-sub > li {
+    /*flex: 0 0 12.5%;*/
+    /*width: 16.66666667%;*/
+
+
+    border: 1px solid #f7f7f7;
+    /*background: green;*/
+    height: auto;
+    /*margin: 0 3px;*/
+    /*position: inherit;*/
+    /*padding: 0px 20px;*/
+    margin: 30px 10px;
+    /*margin-left: 40px;*/
+
+}
+
+.hidden{
+    visibility: hidden;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+
+.menu-category-sub  li  a{
+
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     justify-content: flex-start;
-    align-items: stretch;
-    width: auto;
+    align-items: center;
+    font-size: 16px;
+     color: #333333;
+    text-decoration: none;
+
 
 
 
 }
-.menu-category-sub li {
-    flex: 0 0 135px;
 
-    border: 1px solid #f7f7f7;
-    /*cursor: pointer;*/
-    /*border: 1px solid #f7f7f7;*/
-    /*margin: 0 3px;*/
-    /*height: 70px;*/
+.menu-category-sub > li  a  img{
+    /*display: block;*/
+    text-decoration: none;
+
+    margin: 0 15px 0 0;
+    /*flex: 0 0 25px;*/
+    height: 30px;
+
+
+    /*position: inherit;*/
+}
+
+
+.menu-category-sub > li > a > span{
+
+    flex-grow: 0;
+    margin: 0;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*justify-content: flex-start;*/
+    /*/*margin: 2px auto;*/
+    /*/*white-space: nowrap;*/
+
+}
+
+
+.menu-category-sub-sub{
+    margin-left: 50px;
+    margin-top: 10px;
+     list-style-type: none;
+
+}
+.menu-category-sub-sub > li{
+    margin-top: 10px;
+
+
 }
 /*#checkbox-menu,*/
 /*.toogle{*/
