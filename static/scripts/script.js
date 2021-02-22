@@ -25,25 +25,52 @@ function wrapped() {
     //-------------------------------------------------------------------
 
     var A = $('.menu-category > li');
+    $(".menu-category-sub").css("left",$(".menu-category").offset().left+3);
+    $(".menu-category-sub").css("width",$(".menu-category").width()-87);
 
     A.each(function () {
 
-         var max = 0, i=0;
+         var max = 0, i=0, t=0, r=0, z=0;
          // console.log(this);
          $(this).children('ul').children('li').each(function (index) {
                // console.log($(this).offsetWidth);
              // console.log(this.offsetWidth);
-             if (this.offsetWidth > max) {
-                max = this.offsetWidth;
+             if ($(this).outerWidth(true) > max) {
+                max = $(this).outerWidth(true);
+                // console.log("max");
+                // console.log(this.offsetWidth);
+                // console.log($(this).outerWidth(true));
+                // console.log("max");
            }
 
                 i=i+1;
          });
 
-          $(this).children('ul').children('li').css("width",max);
-          console.log(($(".menu-category").width()-87 )/ max);
-          console.log($(".menu-category").width()-87);
-          console.log(i);
+
+
+          t= ~~(($(".menu-category").width()-87 )/ max);
+          r = ($(".menu-category").width()-87 );
+          if(t>i){
+              $(this).children('ul').children('li').css("width",   r / i - 20);
+          }
+          else {
+              $(this).children('ul').children('li').css("width", r / t - 20);
+          }
+          // $(this).children('ul').children('li').css("width",max);
+          console.log('sleduchiy punkt');
+          console.log(max);
+          console.log(t);
+          //  r = ~~(i / (($(".menu-category").width()-87 )/ max));
+          // // console.log($(".menu-category").width()-87);
+           console.log(r);
+          // z= t-r;
+          console.log(r / t);
+          // console.log('sleduchiy punkt');
+          // console.log($(".menu-category").width()-87);
+          // console.log(max);
+          //  console.log('sleduchiy punkt');
+
+
 
     // console.log($(this).children('a').text());
     // console.log($(this).children('ul').children('li').children('a').text());
@@ -66,8 +93,7 @@ function wrapped() {
     //-------------------------------------------------------------------
 
 
-    $(".menu-category-sub").css("left",$(".menu-category").offset().left+3);
-    $(".menu-category-sub").css("width",$(".menu-category").width()-87);
+
 
 
 
