@@ -24,17 +24,44 @@ function wrapped() {
 
     //-------------------------------------------------------------------
 
-    var A = $('.menu-category-sub  li'), max = 0, elem;
+    var A = $('.menu-category > li');
 
     A.each(function () {
 
-    if (this.offsetWidth > max) {
-        max = this.offsetWidth, elem = this;
+         var max = 0, i=0;
+         // console.log(this);
+         $(this).children('ul').children('li').each(function (index) {
+               // console.log($(this).offsetWidth);
+             // console.log(this.offsetWidth);
+             if (this.offsetWidth > max) {
+                max = this.offsetWidth;
+           }
 
-    }
+                i=i+1;
+         });
+
+          $(this).children('ul').children('li').css("width",max);
+          console.log(($(".menu-category").width()-87 )/ max);
+          console.log($(".menu-category").width()-87);
+          console.log(i);
+
+    // console.log($(this).children('a').text());
+    // console.log($(this).children('ul').children('li').children('a').text());
+    // console.log($(this).children('ul').children('li').width());
+    // if ($(this).children('ul').children('li').offsetWidth > max) {
+    //     max = $(this).children('ul').children('li').offsetWidth;
+    //     elem = $(this).children('ul').children('li');
+    //        }
+        // console.log($(this).children('ul').children('li').offsetWidth);
+        // console.log(elem);
+     // $(A).css("width",this.offsetWidth);
+     // $(A).children("li")
+     // console.log($(elem).width())
 });
+    // console.log($(".menu-category-sub").width())
+    // console.log($(elem).width())
 
-    $(".menu-category-sub > li").css("width",$(elem).width());
+    // $(".menu-category-sub > li").css("width",$(elem).width());
 
     //-------------------------------------------------------------------
 

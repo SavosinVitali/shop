@@ -357,7 +357,7 @@ ul.drop-menu-touch{
     /*!*width: 100%;*!*/
     position: absolute;
 
-    justify-content: space-around;
+    justify-content: space-between;
     /*align-content: space-between;*/
     padding: 0px 40px 10px 40px;
     /*width: 100%;*/
@@ -367,8 +367,9 @@ ul.drop-menu-touch{
 }
 
 .menu-category-sub > li {
-    /*flex: 0 0 12.5%;*/
+    /*flex: 1 0 auto;*/
     /*width: 16.66666667%;*/
+
 
 
     border: 1px solid #f7f7f7;
@@ -383,6 +384,7 @@ ul.drop-menu-touch{
 }
 
 .hidden{
+
     visibility: hidden;
     height: 0;
     margin: 0;
