@@ -367,9 +367,10 @@ ul.drop-menu-touch{
 }
 
 .menu-category-sub > li {
-    /*flex: 1 0 auto;*/
-    /*width: 16.66666667%;*/
 
+    /*flex-shrink: 0;*/
+    /*flex-grow: 0;*/
+    /*flex-basis: auto;*/
 
 
     /*border: 1px solid red;*/
@@ -430,7 +431,7 @@ ul.drop-menu-touch{
     /*flex-direction: column;*/
     /*justify-content: flex-start;*/
     /*/*margin: 2px auto;*/
-    /*/*white-space: nowrap;*/
+    white-space: nowrap;
 
 }
 
