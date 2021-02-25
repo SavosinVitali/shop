@@ -283,7 +283,7 @@ ul.drop-menu-touch{
     border: 1px solid #f7f7f7;
     margin: 0 3px;
     /*position: inherit;*/
-    height: 70px;
+    /*height: 70px;*/
 
 }
 .menu-category > li:hover{
@@ -314,7 +314,7 @@ ul.drop-menu-touch{
     display: block;
     text-decoration: none;
     /*flex: 0 0 25px;*/
-    height: 25px;
+    height: 36px;
     margin: 2px auto;
     /*position: inherit;*/
 }
@@ -359,7 +359,7 @@ ul.drop-menu-touch{
 
     justify-content: flex-start;
     /*align-content: space-between;*/
-    padding: 0px 40px 10px 40px;
+    padding: 0px 20px 10px 40px;
     /*width: 100%;*/
     margin: 0 auto;
 
@@ -368,8 +368,8 @@ ul.drop-menu-touch{
 
 .menu-category-sub > li {
 
-    /*flex-shrink: 0;*/
-    /*flex-grow: 0;*/
+    flex-shrink: 0;
+    flex-grow: 0;
     /*flex-basis: auto;*/
 
 

@@ -3,17 +3,17 @@ $(document).ready(function(){
 
     var A = $('.menu-category > li');
 
-   A.mouseover(function(){
-
+   A.mouseenter(function(){
+        $(".menu-category-sub").children('li').css("flex-basis", 0);
 
        A.each(function () {
 
-         var max = 0, i=0, t=0, r=0, z=0;
+         var max = 0, i=0, t=0, r=0, z=0, pad=0;
 
 
          $(this).children('ul').children('li').each(function (index) {
 
-             if ($(this).width() > max) {
+             if ($(this).outerWidth(true) > max) {
                 max = $(this).outerWidth(true);
 
 
@@ -24,14 +24,19 @@ $(document).ready(function(){
 
 
 
-          t= ~~(($(".menu-category").width()-87 )/ max);
-          r = ($(".menu-category").width()-87 );
+          t= ~~(($(".menu-category-sub").width())/ max);
+          r = ($(".menu-category-sub").width());
 
-          if(t>i){
-              $(this).children('ul').children('li').css("flex-basis",   r / i - 20);
+          // console.log(max);
+          // console.log(t);
+          // console.log(r);
+          pad = ($(this).children('ul').children('li').outerWidth(true) - $(this).children('ul').children('li').width());
+
+           if(t>i){
+              $(this).children('ul').children('li').css("flex-basis",   r / i - pad);
           }
           else {
-              $(this).children('ul').children('li').css("flex-basis",  r / t - 20);
+              $(this).children('ul').children('li').css("flex-basis",  r / t - pad);
           }
 
 
@@ -70,8 +75,7 @@ function wrapped() {
     //-------------------------------------------------------------------
     var max = 0;
     var A = $('.menu-category > li');
-    $(".menu-category-sub").css("left",$(".menu-category").offset().left+3);
-    $(".menu-category-sub").css("width",$(".menu-category").width()-87);
+
 
 
     // console.log($(".menu-category-sub").width())
@@ -87,7 +91,7 @@ function wrapped() {
     //-------------------------------------------------------------------
 
 
-    var offset_top_prev;
+    var offset_top_prev, padm=0;
     $('.flex-item').each(function() {
 
        var offset_top = $(this).offset().top;
@@ -116,8 +120,11 @@ function wrapped() {
 
           }
       }
-
-
+        // console.log('---------------------------');
+      padm = ($(".menu-category").width());
+      // console.log(padm);
+    $(".menu-category-sub").css("left",$(".menu-category").children('li').first().offset().left);
+    $(".menu-category-sub").css("width",$(".menu-category").width()-65);
 
    });
 }
