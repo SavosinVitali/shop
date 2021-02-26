@@ -5,8 +5,9 @@ $(document).ready(function(){
 
    A.mouseenter(function(){
         $(".menu-category-sub").children('li').css("flex-basis", 0);
+        // $(".menu-category-sub").css("width",$(".menu-category").width()-60);
 
-       A.each(function () {
+       // A.each(function () {
 
          var max = 0, i=0, t=0, r=0, z=0, pad=0;
 
@@ -14,7 +15,7 @@ $(document).ready(function(){
          $(this).children('ul').children('li').each(function (index) {
 
              if ($(this).outerWidth(true) > max) {
-                max = $(this).outerWidth(true);
+                max = $(this).width();
 
 
            }
@@ -24,23 +25,26 @@ $(document).ready(function(){
 
 
 
-          t= ~~(($(".menu-category-sub").width())/ max);
-          r = ($(".menu-category-sub").width());
+          t= ~~(($(".menu-category-sub").width()-60)/ max);
+          r= Math.ceil(i/t);
 
-          // console.log(max);
-          // console.log(t);
+          console.log("max");
+          console.log(t);
+          console.log(r);
+          pad =(t*r-i);
           // console.log(r);
-          pad = ($(this).children('ul').children('li').outerWidth(true) - $(this).children('ul').children('li').width());
+          // pad = ($(this).children('ul').children('li').outerWidth(true) - $(this).children('ul').children('li').width());
 
            if(t>i){
-              $(this).children('ul').children('li').css("flex-basis",   r / i - pad);
+              // $(this).children('ul').children('li').css("flex-basis",   r / i - pad-5);
           }
           else {
-              $(this).children('ul').children('li').css("flex-basis",  r / t - pad);
+              $(this).children('ul').children('li').css("flex-basis",  max);
+                $(this).children('ul').append("<li class=\"hidden\"><span>  </span></li>");
           }
 
 
-});
+// });
 
 
 
@@ -81,7 +85,7 @@ function wrapped() {
     // console.log($(".menu-category-sub").width())
     // console.log($(elem).width())
 
-    // $(".menu-category-sub > li").css("width",$(elem).width());
+    $(".header-top-menu").css("overflow","visible");
 
     //-------------------------------------------------------------------
 
@@ -120,11 +124,12 @@ function wrapped() {
 
           }
       }
-        // console.log('---------------------------');
-      padm = ($(".menu-category").width());
-      // console.log(padm);
+       // console.log(($('.menu-category').offset().left + $('.menu-category').width()));
+
+
+
     $(".menu-category-sub").css("left",$(".menu-category").children('li').first().offset().left);
-    $(".menu-category-sub").css("width",$(".menu-category").width()-65);
+    $(".menu-category-sub").css("width",$(".menu-category").width()-60);
 
    });
 }
