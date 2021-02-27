@@ -40,6 +40,7 @@ body, html{
     height: 50px;
     align-items: center;
     white-space: nowrap;
+     visibility: hidden;
 
 
 }
@@ -100,6 +101,7 @@ body, html{
 }
 .drop-menu {
     display: none;
+    z-index: 6;
 }
 
 .drop-menu span{
@@ -259,43 +261,49 @@ ul.drop-menu-touch{
 
 /*____________________________________________header category________________________________*/
 .header-category {
-    display:block;
     padding: 0px 30px;
-
+    display: flex;
+    flex-direction: row;
     /*position: relative;*/
+    flex-wrap: nowrap;
+    visibility: hidden;
 
 
 }
 .menu-category{
     display: flex;
-
+    /*height: 80px;*/
     flex-direction: row;
     align-items: stretch;
 
     list-style-type: none;
     flex-wrap: wrap;
     justify-content: flex-start;
+    overflow: hidden;
+
 
 }
 
 .menu-category > li {
     flex: 1 0 140px;
     /*cursor: pointer;*/
-    border-left: 1px solid #f7f7f7;
+    border-right: 1px solid #f7f7f7;
     margin: 0 0px;
     /*position: inherit;*/
     /*height: 70px;*/
 }
-.menu-category > li:last-child {
-    border-right: 1px solid #f7f7f7;
+.menu-category > li:first-child {
+    border-left: 1px solid #f7f7f7;
 }
 .menu-category > li:hover{
     background:  #f7f7f7;
+    transition:background 0.5s linear;
 
 }
 .menu-category > li:hover > ul{
     visibility: visible;
     opacity:1;
+     transition:visibility 0.5s linear,opacity 0.5s linear;
 }
 
 
@@ -349,7 +357,7 @@ ul.drop-menu-touch{
     visibility:hidden;
      background:  #f7f7f7;
 
-    transition:visibility 0.5s linear,opacity 0.5s linear;
+
     display: flex;
     flex-direction: row;
     list-style-type: none;
@@ -360,9 +368,9 @@ ul.drop-menu-touch{
     /*!*width: 100%;*!*/
     position: absolute;
 
-    justify-content: space-between;
+    justify-content: space-around;
     /*align-content: space-between;*/
-    padding: 0px 20px 10px 40px;
+    padding: 0px 30px;
     /*width: 100%;*/
     margin: 0 auto;
 
@@ -371,8 +379,8 @@ ul.drop-menu-touch{
 
 .menu-category-sub > li {
 
-    flex-shrink: 0;
-    flex-grow: 0;
+    /*flex-shrink: 0;*/
+    /*flex-grow: 0;*/
     /*flex-basis: auto;*/
 
 
@@ -419,7 +427,7 @@ ul.drop-menu-touch{
 
     margin: 0 15px 0 0;
     /*flex: 0 0 25px;*/
-    height: 30px;
+    height: 36px;
 
 
     /*position: inherit;*/
@@ -449,6 +457,98 @@ ul.drop-menu-touch{
     margin-top: 10px;
 
 
+}
+
+.drop-menu-category{
+    width: 50px;
+    flex: 0 0 50px;
+    border-right: 1px solid #f7f7f7;
+    display: none;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+
+
+
+
+}
+.drop-menu-category:hover{
+    background: #f7f7f7;
+    transition:background-color 0.5s linear;
+}
+.drop-menu-category:hover > ul{
+    /*background: #f7f7f7;*/
+    /*transition:background-color 0.5s linear;*/
+    display: flex;
+}
+
+.drop-menu-category > span{
+    display: block;
+    background: url("../../image/points.svg");
+    background-size: cover;
+    width: 25px;
+    height: 25px;
+
+
+
+}
+.drop-menu-touch-category{
+    display: none;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    position: absolute;
+    /*right: 60px;*/
+    /*width: 260px;*/
+    list-style: none;
+
+    right: 0;
+
+}
+
+.drop-menu-touch-category > li{
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*!*flex-wrap: nowrap;*!*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    /*background-color: #8a6d3b;*/
+    /*width: 260px;*/
+     border-bottom: 1px solid #f7f7f7;
+     width: 100%;
+
+
+}
+.drop-menu-touch-category > li a{
+    display: block;
+    color: #333333;
+    text-decoration: none;
+    padding: 15px 15px;
+     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    white-space: nowrap;
+    text-decoration: none;
+
+
+}
+.drop-menu-touch-category  > li  a  img{
+
+    text-decoration: none;
+
+    margin: 0 15px 0 0;
+
+    height: 36px;
+
+}
+.wrapped_submenu:hover{
+    background: #f7f7f7;
 }
 /*#checkbox-menu,*/
 /*.toogle{*/
