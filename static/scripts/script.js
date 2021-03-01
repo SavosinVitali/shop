@@ -37,7 +37,7 @@ function wrapped() {
                 $(".drop-menu").css("display","block");
                 $(".drop-menu").css("position","absolute");
                 $(".drop-menu").css("top","18px");
-                $(".drop-menu").css("left",$('.menu').children("li").not('.wrapped').last().offset().left + $('.menu').children("li").not('.wrapped').last().width()+10);
+                $(".drop-menu").css("left",$('.menu').children("li").not('.wrapped').last().offset().left + $('.menu').children("li").not('.wrapped').last().outerWidth(true)+10);
                 $(this).clone().appendTo(".drop-menu-touch:last");
             }
 
@@ -46,7 +46,7 @@ function wrapped() {
               $(this).removeClass('wrapped');
               $(".drop-menu-touch li:last").remove();
               $(".drop-menu").css("top","18px");
-              $(".drop-menu").css("left", $(this).offset().left+$(this).width() + 10);
+              $(".drop-menu").css("left", $(this).offset().left+$(this).outerWidth(true)+10);
               if ($(".drop-menu-touch").find('li').length == 0) {
                   $(".drop-menu").css("display", "none");
               }
@@ -116,18 +116,10 @@ function sub_menu() {
         r = Math.ceil(i / t);
         pad = (t * r - i);
         if (t > i) {
-            console.log('++++++++');
-        } else {
+            } else {
             for (i = 0; i < pad; i++) {
                 $(this).children('ul').append("<li class=\"hidden\"><span>  </span></li>");
             }
-            console.log('------');
-            console.log($(".menu-category-sub").width());
-            console.log(max);
-            console.log(pad);
-            console.log(t);
-            console.log(i);
-            console.log(r);
             $(this).children('ul').children('li').css("flex-basis", max_real);
 
         }

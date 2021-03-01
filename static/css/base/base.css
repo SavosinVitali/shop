@@ -1,10 +1,16 @@
 @font-face{
     font-family: 'PT';
-    src: url('../../fonts/PT Root UI_Regular.otf') format('truetype');
+    src: url('../../fonts/PT Root UI_Light.otf') format('truetype');
     font-weight: normal; /* жирность и другие параметры сами можете выставить */
     font-style: normal;
 }
 
+@font-face{
+    font-family: 'PT-MEDIUM';
+    src: url('../../fonts/PT Root UI_Regular.otf') format('truetype');
+    font-weight: normal; /* жирность и другие параметры сами можете выставить */
+    font-style: normal;
+}
 
 
 *{
@@ -17,6 +23,9 @@ body, html{
     font-size: 16px;
 
 }
+
+
+
 .header-root{
     max-width: 1576px;
     display: flex;
@@ -25,6 +34,7 @@ body, html{
     margin: 0 auto;
 
 }
+
 #checkbox-menu, .toogle{
     display: none;
 }
@@ -61,13 +71,37 @@ body, html{
     height: 18px;
     list-style-type: none;
 }
+.menu li {
+    height: 18px;
+    width: auto;
+    align-self: center;
+
+
+}
+
+.menu li:hover >a,
+.menu-category > li:hover > a > span,
+.menu-category-sub > li:hover > a > span ,
+.menu-category-sub-sub > li > a:hover,
+.wrapped_submenu:hover a,
+.drop-menu-touch li a:hover span,
+.drop-menu  a:hover
+{
+    transform: scale(1);
+    font-family: 'PT-MEDIUM';
+    color: #46b8da;
+    transition: transform 0.2s linear;
+
+}
 
 .menu li a{
-    height: 18px;
+
     color: #333333;
     text-decoration: none;
-    padding-left: 8px;
-    width: 100%;
+    display: inline-block;
+    margin: 0 20px 0 2px;
+    transition: transform 0.2s linear;
+    line-height: 18px;
 }
 
 .header-top-area{
@@ -89,7 +123,9 @@ body, html{
 }
 .drop-menu {
     display: none;
-    z-index: 6;
+    z-index: 1;
+
+
 }
 
 .icon-drop-menu{
@@ -274,6 +310,15 @@ ul.drop-menu-touch{
     transition:background 0.5s linear;
 
 }
+/*.menu-category > li:hover > a > span{*/
+/*    !*transform: scale(1.1);*!*/
+/*    font-family: 'PT-MEDIUM';*/
+/*    color: #5cb85c;*/
+/*    !*transition: transform 0.2s linear;*!*/
+/*    !*font-weight: bold;*!*/
+
+/*}*/
+
 .menu-category > li:hover > ul{
     visibility: visible;
     opacity:1;
@@ -329,6 +374,11 @@ ul.drop-menu-touch{
 .menu-category-sub > li {
     height: auto;
     margin: 30px 0 30px 20px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
+
 }
 
 .hidden{
@@ -339,15 +389,24 @@ ul.drop-menu-touch{
 }
 
 
-.menu-category-sub  li  a{
+.menu-category-sub > li > a{
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
+    font-family: 'PT-MEDIUM';
     color: #333333;
     text-decoration: none;
+    font-size: 15px;
 }
+/*.menu-category-sub > li > a:hover {*/
+
+/*    font-family: 'PT-MEDIUM';*/
+/*    color: #5cb85c;*/
+/*    transition: transform 0.2s linear;*/
+
+/*}*/
 
 .menu-category-sub > li  a  img{
     text-decoration: none;
@@ -365,13 +424,27 @@ ul.drop-menu-touch{
 
 .menu-category-sub-sub{
     margin-left: 50px;
-    margin-top: 10px;
+    margin-top: 15px;
      list-style-type: none;
 
 }
 .menu-category-sub-sub > li{
     margin-top: 10px;
 }
+.menu-category-sub-sub > li > a{
+    margin-top: 10px;
+    font-weight: normal;
+    color: #333333;
+    text-decoration: none;
+}
+
+/*.menu-category-sub-sub > li > a:hover {*/
+
+/*    font-family: 'PT-MEDIUM';*/
+/*    color: #5cb85c;*/
+/*    transition: transform 0.2s linear;*/
+
+/*}*/
 
 .drop-menu-category{
     width: 50px;
@@ -432,15 +505,18 @@ ul.drop-menu-touch{
     text-decoration: none;
 
 
+
 }
 .drop-menu-touch-category  > li  a  img{
     text-decoration: none;
     margin: 0 15px 0 0;
     height: 36px;
 }
-.wrapped_submenu:hover{
-    background: #f7f7f7;
-}
+/*.wrapped_submenu:hover a{*/
+/*    background: #f7f7f7;*/
+/*    font-family: 'PT-MEDIUM';*/
+/*    color: #5cb85c;*/
+/*}*/
 
 
 /*#checkbox-menu,*/
