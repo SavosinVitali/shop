@@ -1,7 +1,6 @@
 @font-face{
     font-family: 'PT';
     src: url('../../fonts/PT Root UI_Regular.otf') format('truetype');
-    /*src: url("{% static 'fonts/PT Root UI_Light.otf' %}") format('truetype');*/
     font-weight: normal; /* жирность и другие параметры сами можете выставить */
     font-style: normal;
 }
@@ -11,11 +10,11 @@
 *{
     padding: 0;
     margin: 0;
-
 }
 body, html{
-    /*!*overflow-x: hidden;*!*/
     margin: 0 auto;
+    font-family: "PT";
+    font-size: 16px;
 
 }
 .header-root{
@@ -24,8 +23,7 @@ body, html{
     flex-direction: column;
     flex-wrap: nowrap;
     margin: 0 auto;
-    font-family: "PT";
-    font-size: 16px;
+
 }
 #checkbox-menu, .toogle{
     display: none;
@@ -41,8 +39,6 @@ body, html{
     align-items: center;
     white-space: nowrap;
      visibility: hidden;
-
-
 }
 .header-top-menu{
     display: flex;
@@ -56,7 +52,6 @@ body, html{
 }
 
 .menu{
-
     display: flex;
     justify-content: flex-start;
     flex-direction: row;
@@ -64,10 +59,7 @@ body, html{
 
     padding: 0;
     height: 18px;
-    /*overflow: hidden;*/
     list-style-type: none;
-
-
 }
 
 .menu li a{
@@ -76,12 +68,8 @@ body, html{
     text-decoration: none;
     padding-left: 8px;
     width: 100%;
-
-
 }
-/*li a:hover {*/
-/*    text-shadow: 0 0 .5px #666, 0 0 .5px #666;*/
-/*}*/
+
 .header-top-area{
     display: flex;
     justify-content: flex-start;
@@ -104,7 +92,7 @@ body, html{
     z-index: 6;
 }
 
-.drop-menu span{
+.icon-drop-menu{
     display: block;
     background: url("../../image/points.svg");
     background-size: cover;
@@ -116,10 +104,10 @@ body, html{
 .wrapped{
     visibility: hidden;
 }
-.drop-menu span:hover >ul{
+.drop-menu div:hover >ul{
     visibility: visible;
 }
-.drop-menu span:hover ul > li{
+.drop-menu div:hover ul > li{
     visibility: visible;
 }
 
@@ -141,10 +129,6 @@ ul.drop-menu-touch{
     color: #333333;
     text-decoration: none;
     padding: 5px 0;
-
-
-
-
 }
 /*____________________________________________header botton________________________________*/
 
@@ -158,7 +142,6 @@ ul.drop-menu-touch{
 
 }
 .header-bottom-logo{
-       /*height: 50px;*/
     align-self: center;
 
 }
@@ -168,7 +151,6 @@ ul.drop-menu-touch{
 }
 .header-bottom-search{
     flex-basis: 850px;
-    /*height: 70px;*/
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -184,7 +166,6 @@ ul.drop-menu-touch{
 
     width: 100%;
     font-size: 16px;
-    font-family: "PT";
     height: 50px;
     padding-left: 7px;
     margin: 0;
@@ -264,33 +245,26 @@ ul.drop-menu-touch{
     padding: 0px 30px;
     display: flex;
     flex-direction: row;
-    /*position: relative;*/
     flex-wrap: nowrap;
     visibility: hidden;
+    font-size: 14px;
 
 
 }
 .menu-category{
     display: flex;
-    /*height: 80px;*/
     flex-direction: row;
     align-items: stretch;
-
     list-style-type: none;
     flex-wrap: wrap;
     justify-content: flex-start;
     overflow: hidden;
-
-
 }
 
 .menu-category > li {
     flex: 1 0 140px;
-    /*cursor: pointer;*/
     border-right: 1px solid #f7f7f7;
     margin: 0 0px;
-    /*position: inherit;*/
-    /*height: 70px;*/
 }
 .menu-category > li:first-child {
     border-left: 1px solid #f7f7f7;
@@ -324,10 +298,8 @@ ul.drop-menu-touch{
 .menu-category > li > a > img{
     display: block;
     text-decoration: none;
-    /*flex: 0 0 25px;*/
     height: 36px;
     margin: 2px auto;
-    /*position: inherit;*/
 }
 
 
@@ -336,67 +308,30 @@ ul.drop-menu-touch{
     flex-direction: column;
     justify-content: space-around;
     margin: 2px auto;
-
-    font-size: 14px;
     flex-grow: 1;
 
 }
-/*.main-category-sub{*/
-/*    position: absolute;*/
-/*    background:  #f7f7f7;*/
-/*    margin: 0px auto;*/
-/*    width: 100%;*/
-/*    left: 30px;*/
-/*    max-width: 1576px;*/
-
-
-/*}*/
 
 .menu-category-sub{
     opacity:0;
     visibility:hidden;
-     background:  #f7f7f7;
-
-
+    background:  #f7f7f7;
     display: flex;
     flex-direction: row;
     list-style-type: none;
     flex-wrap: wrap;
-    /*right: 80px;*/
-    /*max-width: 1573px;*/
-
-    /*!*width: 100%;*!*/
     position: absolute;
-
     justify-content: space-around;
-    /*align-content: space-between;*/
     padding: 0px 30px;
-    /*width: 100%;*/
     margin: 0 auto;
-
-
 }
 
 .menu-category-sub > li {
-
-    /*flex-shrink: 0;*/
-    /*flex-grow: 0;*/
-    /*flex-basis: auto;*/
-
-
-    /*border: 1px solid red;*/
-    /*background: green;*/
     height: auto;
-    /*margin: 0 3px;*/
-    /*position: inherit;*/
-    /*padding: 0px 20px;*/
     margin: 30px 0 30px 20px;
-    /*margin-left: 40px;*/
-
 }
 
 .hidden{
-
     visibility: hidden;
     height: 0;
     margin: 0;
@@ -405,45 +340,26 @@ ul.drop-menu-touch{
 
 
 .menu-category-sub  li  a{
-
-
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: center;
-    font-size: 16px;
-     color: #333333;
+    color: #333333;
     text-decoration: none;
-
-
-
-
 }
 
 .menu-category-sub > li  a  img{
-    /*display: block;*/
     text-decoration: none;
-
     margin: 0 15px 0 0;
-    /*flex: 0 0 25px;*/
     height: 36px;
-
-
-    /*position: inherit;*/
 }
 
 
 .menu-category-sub > li > a > span{
-
     flex-grow: 0;
     margin: 0;
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*justify-content: flex-start;*/
-    /*/*margin: 2px auto;*/
     white-space: nowrap;
-
 }
 
 
@@ -455,8 +371,6 @@ ul.drop-menu-touch{
 }
 .menu-category-sub-sub > li{
     margin-top: 10px;
-
-
 }
 
 .drop-menu-category{
@@ -470,18 +384,12 @@ ul.drop-menu-touch{
     align-items: center;
     cursor: pointer;
     position: relative;
-
-
-
-
 }
 .drop-menu-category:hover{
     background: #f7f7f7;
     transition:background-color 0.5s linear;
 }
 .drop-menu-category:hover > ul{
-    /*background: #f7f7f7;*/
-    /*transition:background-color 0.5s linear;*/
     display: flex;
 }
 
@@ -491,33 +399,20 @@ ul.drop-menu-touch{
     background-size: cover;
     width: 25px;
     height: 25px;
-
-
-
 }
 .drop-menu-touch-category{
     display: none;
-    flex-direction: column;
+    flex-direction: column-reverse;
     flex-wrap: nowrap;
     justify-content: flex-start;
     align-items: flex-start;
     position: absolute;
-    /*right: 60px;*/
-    /*width: 260px;*/
     list-style: none;
-
     right: 0;
 
 }
 
 .drop-menu-touch-category > li{
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*!*flex-wrap: nowrap;*!*/
-    /*justify-content: center;*/
-    /*align-items: center;*/
-    /*background-color: #8a6d3b;*/
-    /*width: 260px;*/
      border-bottom: 1px solid #f7f7f7;
      width: 100%;
 
@@ -539,17 +434,15 @@ ul.drop-menu-touch{
 
 }
 .drop-menu-touch-category  > li  a  img{
-
     text-decoration: none;
-
     margin: 0 15px 0 0;
-
     height: 36px;
-
 }
 .wrapped_submenu:hover{
     background: #f7f7f7;
 }
+
+
 /*#checkbox-menu,*/
 /*.toogle{*/
 /*    display: none;*/
