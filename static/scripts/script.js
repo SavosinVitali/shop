@@ -1,3 +1,4 @@
+
 $('.menu-category').ready(function(){
     sub_menu();
     wrapped_submenu();
@@ -18,6 +19,13 @@ $(window).resize(function() {
         sub_menu();
         wrapped_submenu();
       }
+    // if (width <= 801) {
+    //     $('.flex-item').each(function() {
+    //         $(this).removeClass('wrapped');
+    //     });
+    //
+    //   }
+
 });
 
 
@@ -54,6 +62,7 @@ function wrapped() {
           }
       }
    });
+
      $(".header-top").css("visibility","visible");
 }
 
@@ -64,7 +73,9 @@ function wrapped_submenu() {
    A.each(function() {
        var offset_top = $(this).offset().top;
        if (offset_top > offset_top_prev) {
-             $('.menu-category').css("height",A.first('li').height());
+             $('.menu-category').css("height",A.first().height());
+             // console.log(A.first().height());
+             // console.log($('.header-category').height());
             if($(this).hasClass('wrapped_submenu')){
 
              } else {
