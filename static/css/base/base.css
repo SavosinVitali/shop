@@ -87,10 +87,10 @@ body, html{
 .drop-menu-touch li a:hover span,
 .drop-menu  a:hover
 {
-    transform: scale(1);
-    font-family: 'PT-MEDIUM';
-    color: #46b8da;
-    transition: transform 0.2s linear;
+    /*transform: scale(1);*/
+    /*font-family: 'PT-MEDIUM';*/
+    color: #4ac3ce;
+    transition: color 0.2s linear;
 
 }
 

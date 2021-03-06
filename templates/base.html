@@ -5,16 +5,16 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<link rel="stylesheet" href="{% static 'css/base/base.css'%}">
+	<link rel="stylesheet" href="{% static 'css/base/base.css'%}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/base/media.css'%}" type="text/css">
 	<title>Document</title>
 </head>
 <body>
 	<header>
         <div class="header-root">
 
-			<label for="checkbox-menu">
-				<input type="checkbox" name="modile_menu" id="checkbox-menu">
-            </label>
+			<input type="checkbox" name="toggle" id="menu" class="toggleMenu">
+             <label for="menu" class="toggleMenu"><i class="fa fa-bars"></i>Меню</label>
             <div class="header-top">
                 <div class="header-top-menu">
                     <nav>
@@ -47,7 +47,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="header-bottom">
                 <div class="header-bottom-logo">
                     <a  href="logo.html"><img src="{% static 'image/logo.png' %}" alt="logo"></a>
