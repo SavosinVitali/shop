@@ -159,8 +159,12 @@ ul.drop-menu-touch{
     background: white;
     border: 1px solid #f7f7f7;
 }
-
-
+ .drop-menu-touch li{
+     width: 100%;
+}
+.drop-menu-touch li:hover{
+     background: #f7f7f7;
+}
 .drop-menu-touch li a{
     display: block;
     color: #333333;
@@ -489,8 +493,9 @@ ul.drop-menu-touch{
 .drop-menu-touch-category > li{
      border-bottom: 1px solid #f7f7f7;
      width: 100%;
-
-
+}
+.drop-menu-touch-category > li:hover{
+    background: #f7f7f7;
 }
 .drop-menu-touch-category > li a{
     display: block;
