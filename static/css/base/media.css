@@ -178,11 +178,17 @@ input.toggleMenu:checked ~ .header-bottom > .header-bottom-controls > a.user{
     top: 0;
     left: 50%;
     margin-right: -50%;
+    padding-top: 2px;
     transform: translate(-50%, 0);
 }
-.header-bottom-logo img{
-    height: 50px;
 
+.header-bottom-logo img{
+    display: block;
+    height: 50px;
+}
+.header-bottom-logo a{
+
+    display: block;
 }
 a.cart{
     display: block;
@@ -279,6 +285,9 @@ ul.menu-category-sub, ul.menu-category-sub-sub{
     padding: 0;
     margin: 0;
     border-bottom: 1px solid #f7f7f7;
+}
+.menu-category-sub  li:last-child {
+      border-bottom: none;
 }
 
 .menu-category-sub > li:hover {

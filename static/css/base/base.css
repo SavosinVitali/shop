@@ -152,7 +152,7 @@ ul.drop-menu-touch{
     visibility: hidden;
     position: absolute;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: flex-start;
     top: 16px;
     list-style-type: none;
@@ -161,6 +161,7 @@ ul.drop-menu-touch{
 }
  .drop-menu-touch li{
      width: 100%;
+
 }
 .drop-menu-touch li:hover{
      background: #f7f7f7;
@@ -169,7 +170,7 @@ ul.drop-menu-touch{
     display: block;
     color: #333333;
     text-decoration: none;
-    padding: 5px 0;
+    padding: 5px 10px;
 }
 /*____________________________________________header botton________________________________*/
 
@@ -287,6 +288,7 @@ ul.drop-menu-touch{
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    justify-content: flex-start;
     visibility: hidden;
     font-size: 14px;
 
@@ -300,12 +302,19 @@ ul.drop-menu-touch{
     flex-wrap: wrap;
     justify-content: flex-start;
     overflow: hidden;
+    padding: 0;
+
+
 }
 
 .menu-category > li {
     flex: 1 0 140px;
+
     border-right: 1px solid #f7f7f7;
-    margin: 0 0px;
+    margin: 0;
+    display: block;
+    padding: 0 4px;
+    /*white-space: normal;*/
 }
 .menu-category > li:first-child {
     border-left: 1px solid #f7f7f7;
@@ -348,8 +357,8 @@ ul.drop-menu-touch{
 .menu-category > li > a > img{
     display: block;
     text-decoration: none;
-    height: 36px;
-    margin: 2px auto;
+    height: 30px;
+    margin: 4px 0 0 0;
 }
 
 
@@ -372,13 +381,13 @@ ul.drop-menu-touch{
     flex-wrap: wrap;
     position: absolute;
     justify-content: space-around;
-    padding: 0px 30px;
-    margin: 0 auto;
+    padding: 0px;
+    /*margin: 0 30px;*/
 }
 
 .menu-category-sub > li {
     height: auto;
-    margin: 30px 0 30px 20px;
+    margin: 30px 5px 30px 20px;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
@@ -416,7 +425,7 @@ ul.drop-menu-touch{
 .menu-category-sub > li  a  img{
     text-decoration: none;
     margin: 0 15px 0 0;
-    height: 36px;
+    height: 30px;
 }
 
 
@@ -486,13 +495,16 @@ ul.drop-menu-touch{
     align-items: flex-start;
     position: absolute;
     list-style: none;
-    right: 0;
+    right: -1px;
 
 }
 
 .drop-menu-touch-category > li{
      border-bottom: 1px solid #f7f7f7;
      width: 100%;
+}
+.wrapped_submenu li {
+    width: auto;
 }
 .drop-menu-touch-category > li:hover{
     background: #f7f7f7;
@@ -516,7 +528,10 @@ ul.drop-menu-touch{
 .drop-menu-touch-category  > li  a  img{
     text-decoration: none;
     margin: 0 15px 0 0;
-    height: 36px;
+    height: 30px;
+}
+.drop-menu-touch-category  > li > ul{
+   display: none;
 }
 
 
